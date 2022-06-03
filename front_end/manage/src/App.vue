@@ -1,7 +1,27 @@
 <template>
-
-  <router-view/>
+  <!-- <div id="app" > -->
+    <el-container >
+      <el-aside width="200px">
+        <SideBar />
+      </el-aside>
+      <el-main>
+        <router-view></router-view>
+      </el-main>
+    </el-container>
+  <!-- </div> -->
 </template>
+
+<script>
+import SideBar from "@/components/SideBar.vue";
+
+export default {
+  name: "App",
+  components: {
+    SideBar,
+  },
+};
+</script>
+
 
 <style lang="scss">
 #app {
@@ -12,16 +32,8 @@
   color: #2c3e50;
 }
 
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+.el-input{
+    width:200px
 }
+
 </style>
