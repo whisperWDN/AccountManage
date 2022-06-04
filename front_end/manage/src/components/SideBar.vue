@@ -20,15 +20,15 @@
 
           <el-menu-item index="2-2" @click="hrefToCA">法人账户</el-menu-item>
 
-          <el-menu-item>
-            <span slot="title">审核</span>
+          <el-menu-item  @click="hrefToCS">
+            <span slot="title" >审核</span>
           </el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="3">
           <template #title>资金账户</template>
           <el-menu-item index="3-1" @click="hrefToAA">账户管理</el-menu-item>
 
-          <el-menu-item index="3-2">审核</el-menu-item>
+          <el-menu-item index="3-2" @click="hrefToCheckA">审核</el-menu-item>
         </el-sub-menu>
 
       </el-menu>
@@ -54,6 +54,12 @@ export default {
       },
       hrefToAA(){
         this.$router.push({ path:'/AssetAccount'})
+      },
+      hrefToCS(){
+        this.$router.push({ path:'/CheckS'})
+      },
+      hrefToCheckA(){
+        this.$router.push({ path:'/CheckA'})
       }
     }
 }

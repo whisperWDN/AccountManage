@@ -1,58 +1,36 @@
 <template>
   <el-tabs v-model="activeName" @tab-click="handleClick">
     <el-tab-pane label="开户" name="first" >
-      <el-form ref="ruleForm" :model="openAccount" label-width="80px" :rules="rules">
-        <el-row>
-          <el-form-item label="姓名" prop="name">
-            <el-input v-model="openAccount.name"></el-input>
-          </el-form-item>
-          <el-form-item label="性别" prop="gender">
-            <el-radio-group v-model="openAccount.gender">
-            <el-radio label="男"></el-radio>
-            <el-radio label="女"></el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </el-row>
+      <el-form ref="ruleForm" :model="openAccount" label-width="200px" :rules="rules">
+
+        <el-form-item label="证券账户号" prop="account">
+          <el-input v-model="openAccount.account"></el-input>
+        </el-form-item>
+
+        <el-form-item label="密码" prop="password">
+          <el-input type="password" v-model="openAccount.password" autocomplete="off"></el-input>
+        </el-form-item>      
 
         <el-form-item label="身份证号" prop="license">
           <el-input v-model="openAccount.license"></el-input>
         </el-form-item>
-        <el-form-item label="家庭住址">
-          <el-input v-model="openAccount.address" style="width: 500px"></el-input>
+
+        <el-form-item label="资金账户登录密码"  prop="password">
+          <el-input type="password" v-model="openAccount.loginPassword" autocomplete="off"></el-input>
         </el-form-item>
-        <el-row>
-          <el-form-item label="职业">
-            <el-input v-model="openAccount.profession"></el-input>
-          </el-form-item>
-          <el-form-item label="学历">
-            <el-select v-model="openAccount.education" placeholder="请选择学历">
-              <el-option label="小学" value="小学"></el-option>
-              <el-option label="初中" value="初中"></el-option>
-              <el-option label="高中" value="高中"></el-option>
-              <el-option label="大学专科" value="大学专科"></el-option>
-              <el-option label="大学本科" value="大学本科"></el-option>
-              <el-option label="硕士" value="硕士"></el-option>
-              <el-option label="博士" value="博士"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-row>
-        <el-form-item label="工作单位">
-          <el-input v-model="openAccount.company" style="width: 500px"></el-input>
-        </el-form-item>
-        <el-row>
-          <el-form-item label="电话号码" prop="phone">
-            <el-input v-model="openAccount.phone"></el-input>
-          </el-form-item>
-          <el-form-item label="邮箱" prop="email">
-            <el-input v-model="openAccount.email"></el-input>
-          </el-form-item>
-        </el-row>
-        <el-form-item label="密码" prop="password">
-          <el-input type="password" v-model="openAccount.password" autocomplete="off"></el-input>
-        </el-form-item>        
-        <el-form-item label="确认密码"  prop="confirm">
+
+        <el-form-item label="重复密码"  prop="confirm">
           <el-input type="password" v-model="openAccount.confirm" autocomplete="off"></el-input>
         </el-form-item>
+
+        <el-form-item label="资金账户交易密码"  prop="password">
+          <el-input type="password" v-model="openAccount.tradePassword" autocomplete="off"></el-input>
+        </el-form-item>
+
+        <el-form-item label="重复密码">
+          <el-input type="password" v-model="openAccount.confirm2" autocomplete="off"></el-input>
+        </el-form-item>
+
         <el-form-item>
           <el-button type="primary" @click="onSubmit">开户</el-button>
         </el-form-item>
@@ -90,58 +68,38 @@
         </el-form-item>
       </el-form>
 
-      <el-form ref="ruleForm" :model="reOpenAccount" label-width="80px" :rules="rules" v-else>
-        <el-row>
-          <el-form-item label="姓名" prop="name">
-            <el-input v-model="reOpenAccount.name" ></el-input>
-          </el-form-item>
-          <el-form-item label="性别" prop="gender">
-            <el-radio-group v-model="reOpenAccount.gender" >
-            <el-radio label="男"></el-radio>
-            <el-radio label="女"></el-radio>
-            </el-radio-group>
-          </el-form-item>
-        </el-row>
+      <el-form ref="ruleForm" :model="reOpenAccount" label-width="200px" :rules="rules">
+
+        <el-form-item label="证券账户号" prop="account">
+          <el-input v-model="reOpenAccount.account"></el-input>
+        </el-form-item>
+
+        <el-form-item label="密码" prop="password">
+          <el-input type="password" v-model="reOpenAccount.password" autocomplete="off"></el-input>
+        </el-form-item>      
 
         <el-form-item label="身份证号" prop="license">
-          <el-input v-model="reOpenAccount.license" ></el-input>
+          <el-input v-model="reOpenAccount.license"></el-input>
         </el-form-item>
-        <el-form-item label="家庭住址">
-          <el-input v-model="reOpenAccount.address"></el-input>
+
+        <el-form-item label="资金账户登录密码"  prop="password">
+          <el-input type="password" v-model="reOpenAccount.loginPassword" autocomplete="off"></el-input>
         </el-form-item>
-        <el-row>
-          <el-form-item label="职业">
-            <el-input v-model="reOpenAccount.profession"></el-input>
-          </el-form-item>
-          <el-form-item label="学历">
-            <el-select v-model="reOpenAccount.education" placeholder="请选择学历">
-              <el-option label="小学" value="小学"></el-option>
-              <el-option label="初中" value="初中"></el-option>
-              <el-option label="高中" value="高中"></el-option>
-              <el-option label="大学专科" value="大学专科"></el-option>
-              <el-option label="大学本科" value="大学本科"></el-option>
-              <el-option label="硕士" value="硕士"></el-option>
-              <el-option label="博士" value="博士"></el-option>
-            </el-select>
-          </el-form-item>
-        </el-row>
-        <el-form-item label="工作单位">
-          <el-input v-model="reOpenAccount.company"></el-input>
+
+        <el-form-item label="重复密码"  prop="confirm2">
+          <el-input type="password" v-model="reOpenAccount.confirm" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="电话号码" prop="phone">
-          <el-input v-model="reOpenAccount.phone" ></el-input>
+
+        <el-form-item label="资金账户交易密码"  prop="password">
+          <el-input type="password" v-model="reOpenAccount.tradePassword" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="reOpenAccount.email" ></el-input>
+
+        <el-form-item label="重复密码">
+          <el-input type="password" v-model="reOpenAccount.confirm2" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="reOpenAccount.password" ></el-input>
-        </el-form-item>        
-        <el-form-item label="确认密码" prop="confirm2">
-          <el-input v-model="reOpenAccount.confirm" ></el-input>
-        </el-form-item>
+
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">重新开户</el-button>
+          <el-button type="primary" @click="onSubmit">补办</el-button>
         </el-form-item>
       </el-form>
     </el-tab-pane>
@@ -163,8 +121,8 @@
     </el-tab-pane> 
     <el-tab-pane label="修改" name="fifth">
       <el-form ref="ruleForm" :model="modify" label-width="80px" :rules="rules">
-        <el-form-item label="账户号">
-            <el-input v-model="modify.account" prop="account"></el-input>
+        <el-form-item label="账户号" prop="account">
+            <el-input v-model="modify.account" ></el-input>
         </el-form-item>  
         <el-form-item label="密码类型">
             <el-radio-group v-model="modify.type">
@@ -172,14 +130,14 @@
             <el-radio label="交易密码"></el-radio>
             </el-radio-group>
         </el-form-item>
-        <el-form-item label="原有密码">
-            <el-input v-model="modify.oldPassword" prop="password"></el-input>
+        <el-form-item label="原有密码" prop="password">
+            <el-input v-model="modify.oldPassword" ></el-input>
         </el-form-item>  
-        <el-form-item label="新密码">
-            <el-input  v-model="modify.newPassword" prop="password"></el-input>
+        <el-form-item label="新密码" prop="password">
+            <el-input  v-model="modify.newPassword" ></el-input>
         </el-form-item>
-        <el-form-item label="重复密码">
-            <el-input  v-model="modify.confirm" prop="confirm3"></el-input>
+        <el-form-item label="重复密码" prop="confirm3">
+            <el-input  v-model="modify.confirm" ></el-input>
         </el-form-item>  
         <el-form-item>
             <el-button type="primary" @click="onSubmit">确认修改</el-button>
@@ -187,18 +145,27 @@
       </el-form>
     </el-tab-pane>
     <el-tab-pane label="存取款" name="sixth">
-      <el-form ref="ruleForm" :model="lossRegister" label-width="80px" :rules="rules">
+      <el-form ref="ruleForm" :model="DepositWithdrawal" label-width="80px" :rules="rules">
         <el-form-item label="账户号" prop="account">
-          <el-input v-model="lossRegister.account" ></el-input>
+          <el-input v-model="DepositWithdrawal.account" ></el-input>
         </el-form-item>  
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="lossRegister.password" ></el-input>
+        <el-form-item label="登录密码" prop="password">
+          <el-input v-model="DepositWithdrawal.loginPassword" ></el-input>
         </el-form-item>  
-        <el-form-item label="身份证号" prop="license">
-          <el-input v-model="lossRegister.license" ></el-input>
+        <el-form-item label="交易密码" prop="password">
+          <el-input v-model="DepositWithdrawal.DWPassword" ></el-input>
+        </el-form-item> 
+        <el-form-item label="操作类型" >
+            <el-radio-group v-model="DepositWithdrawal.type">
+            <el-radio label="存款"></el-radio>
+            <el-radio label="取款"></el-radio>
+            </el-radio-group>
+          </el-form-item>
+        <el-form-item label="交易金额" >
+          <el-input v-model="DepositWithdrawal.value" ></el-input>
         </el-form-item>  
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">挂失</el-button>
+          <el-button type="primary" @click="onSubmit">提交</el-button>
         </el-form-item>
       </el-form>
     </el-tab-pane>
@@ -266,14 +233,23 @@
 	          if(!reg.test(value)){
 	            callback(new Error('请输入有效的密码'));
 	          }
-	        }
+	        }else
           callback();
         }
       };
       var validatePass2 = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请再次输入密码'));
-        } else if (value !== this.openAccount.password) {
+        } else if (value !== this.openAccount.loginPassword) {
+          callback(new Error('两次输入密码不一致!'));
+        } else {
+          callback();
+        }
+      };
+      var validatePass5 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('密码不可为空'));
+        } else if (value !== this.openAccount.tradePassword) {
           callback(new Error('两次输入密码不一致!'));
         } else {
           callback();
@@ -282,7 +258,7 @@
       var validatePass3 = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请再次输入密码'));
-        } else if (value !== this.reOpenAccount.password) {
+        } else if (value !== this.reOpenAccount.loginPassword) {
           callback(new Error('两次输入密码不一致!'));
         } else {
           callback();
@@ -297,20 +273,28 @@
           callback();
         }
       };
+
+      var validatePass6 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'));
+        } else if (value !== this.reOpenAccount.tradePassword) {
+          callback(new Error('两次输入密码不一致!'));
+        } else {
+          callback();
+        }
+      };
       return {
         activeName: 'second',
         openAccount: {
-          name: '',
-          gender: '',
+
           license: '',
-          address: '',
-          profession: '',
-          education:'',
-          company:'',
+          account: '',
           password:'',
+          loginPassword:'',
           confirm:'',
-          phone:'',
-          email:''
+          tradePassword:'',
+          confirm2:'',
+
         },
         lossRegister:{
           license: '',
@@ -328,17 +312,13 @@
           password:''
         },
         reOpenAccount: {
-          name: '',
-          gender: '',
           license: '',
-          address: '',
-          profession: '',
-          education:'',
-          company:'',
+          account: '',
           password:'',
+          loginPassword:'',
           confirm:'',
-          phone:'',
-          email:''
+          tradePassword:'',
+          confirm2:'',
         },
         modify:{
           type: '',
@@ -346,6 +326,13 @@
           oldPassword:'',
           newPassword:'',
           confirm:''
+        },
+        DepositWithdrawal:{
+          account:'',
+          loginPassword:'',
+          DWPassword:'',
+          type:'',
+          value:''
         },
         rules: {
           name: [
@@ -360,14 +347,13 @@
             { validator: validateIDCard, trigger: 'blur' }
           ],
           email: [
-
-
             { validator: validateEmail, trigger: 'blur' }
           ],
           phone: [
             { validator: validateMobilePhone, trigger: 'blur' }
           ],
           password: [
+            { required: true, message: '请输入密码', trigger: 'blur' },
             { validator: validatePass, trigger: 'blur' }
           ],
           confirm: [
@@ -379,7 +365,12 @@
           confirm3: [
             { validator: validatePass4, trigger: 'blur' }
           ],
-
+          confirm4: [
+            { validator: validatePass5, trigger: 'blur' }
+          ],  
+          confirm5: [
+            { validator: validatePass6, trigger: 'blur' }
+          ],
           account: [
             { validator: validateAccount, trigger: 'blur' }
 

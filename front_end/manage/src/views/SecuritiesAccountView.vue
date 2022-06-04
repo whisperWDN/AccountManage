@@ -54,7 +54,7 @@
           <el-input type="password" v-model="openAccount.confirm" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">开户</el-button>
+          <el-button type="primary" @click="get_data">开户</el-button>
         </el-form-item>
       </el-form>
     </el-tab-pane>
@@ -163,7 +163,9 @@
     </el-tab-pane> 
   </el-tabs>
 </template>
+
 <script>
+import axios from 'axios';
   export default {
     name:"SecuritiesAccountView",
     data() {
@@ -336,7 +338,20 @@
       },
       onSubmit() {
         console.log('submit!');
+      },
+      get_data(){
+        axios
+          .get('https://api.jike.xyz/situ/book/isbn/9787020024759?apikey=12775.2411e68a143df74f82e7654e0c6c5d17.a9c9149f33c5af2f565e092ea7db63ec')
+          .then(response => {
+            // 调用表格数据同步方法
+            console.log(response.data);
+            })
+          // 请求失败抛出异常在控制台
+          .catch(function (error) {
+            console.log(error);
+        });
       }
+
     }
   };
 </script>
