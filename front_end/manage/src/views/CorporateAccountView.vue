@@ -64,7 +64,7 @@
           <el-input v-model="openAccount.confirm" ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">开户</el-button>
+          <el-button type="primary" @click="open">开户</el-button>
         </el-form-item>
       </el-form>
     </el-tab-pane>
@@ -80,7 +80,7 @@
           <el-input v-model="lossRegister.license" ></el-input>
         </el-form-item>  
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">挂失</el-button>
+          <el-button type="primary" @click="loss">挂失</el-button>
         </el-form-item>
       </el-form>
     </el-tab-pane>
@@ -96,7 +96,7 @@
           <el-input v-model="reOpen.license"></el-input>
         </el-form-item>  
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">补办</el-button>
+          <el-button type="primary" @click="pre_reopen">补办</el-button>
         </el-form-item>
       </el-form>
       <el-form ref="ruleForm" :model="reOpenAccount" label-width="200px" :rules="rules" v-else>
@@ -162,7 +162,7 @@
           <el-input v-model="reOpenAccount.confirm"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">开户</el-button>
+          <el-button type="primary" @click="reopen">重新开户</el-button>
         </el-form-item>
       </el-form>
 
@@ -179,7 +179,7 @@
           <el-input v-model="closeAccount.license"></el-input>
         </el-form-item>  
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">销户</el-button>
+          <el-button type="primary" @click="close">销户</el-button>
         </el-form-item>
       </el-form>
     </el-tab-pane>
@@ -360,11 +360,51 @@
       };
     },
     methods: {
-      handleClick(tab, event) {
-        console.log(tab, event);
+
+      open(){
+        this.$http.post('/security/co_register',this.$qs.stringify(this.openAccount))
+          .then(response => {
+            alert(response.data);
+            })
+          .catch(function (error) {
+            console.log(error);
+        });
       },
-      onSubmit() {
-        console.log('submit!');
+      loss(){
+        this.$http.post('/security/co_lost',this.$qs.stringify(this.lossRegister))
+          .then(response => {
+            console.log(response.data);
+            })
+          .catch(function (error) {
+            console.log(error);
+        });
+      },
+      pre_reopen(){
+        this.$http.post('/security/co_re_register',this.$qs.stringify(this.reOpen))
+          .then(response => {
+            console.log(response.data);
+            })
+          .catch(function (error) {
+            console.log(error);
+        });
+      },
+      reopen(){
+        this.$http.post('/security/co_re_register2',this.$qs.stringify(this.reOpenAccount))
+          .then(response => {
+            console.log(response.data);
+            })
+          .catch(function (error) {
+            console.log(error);
+        });
+      },
+      close(){
+        this.$http.post('/security/co_delete',this.$qs.stringify(this.closeAccount))
+          .then(response => {
+            console.log(response.data);
+            })
+          .catch(function (error) {
+            console.log(error);
+        });      
       }
     }
   };
