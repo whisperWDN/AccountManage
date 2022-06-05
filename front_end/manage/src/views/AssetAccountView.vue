@@ -38,7 +38,7 @@
     </el-tab-pane>
     <el-tab-pane label="挂失" name="second">
       <el-form ref="lossRegisterForm" :model="lossRegister" label-width="80px" :rules="rules">
-        <el-form-item label="账户号" prop="account">
+        <el-form-item label="账户号" prop="assetAccount">
           <el-input v-model="lossRegister.account" ></el-input>
         </el-form-item>  
         <el-form-item label="密码" prop="password">
@@ -54,7 +54,7 @@
     </el-tab-pane>
     <el-tab-pane label="重新开户" name="third">
       <el-form ref="reOpenForm" :model="reOpen" label-width="80px" :rules="rules" v-if="status">
-        <el-form-item label="账户号" prop="account">
+        <el-form-item label="账户号" prop="assetAccount">
           <el-input v-model="reOpen.account" ></el-input>
         </el-form-item>  
         <el-form-item label="密码" prop="password">
@@ -105,7 +105,7 @@
     </el-tab-pane>
     <el-tab-pane label="销户" name="fourth">
       <el-form ref="closeAccountForm" :model="closeAccount" label-width="80px" :rules="rules">
-        <el-form-item label="账户号" prop="account">
+        <el-form-item label="账户号" prop="assetAccount">
           <el-input v-model="closeAccount.account" ></el-input>
         </el-form-item>  
         <el-form-item label="密码" prop="password">
@@ -121,7 +121,7 @@
     </el-tab-pane> 
     <el-tab-pane label="修改" name="fifth">
       <el-form ref="modifyForm" :model="modify" label-width="80px" :rules="rules">
-        <el-form-item label="账户号" prop="account">
+        <el-form-item label="账户号" prop="assetAccount">
             <el-input v-model="modify.account" ></el-input>
         </el-form-item>  
         <el-form-item label="密码类型">
@@ -146,7 +146,7 @@
     </el-tab-pane>
     <el-tab-pane label="存取款" name="sixth">
       <el-form ref="DepositWithdrawalForm" :model="DepositWithdrawal" label-width="80px" :rules="rules">
-        <el-form-item label="账户号" prop="account">
+        <el-form-item label="账户号" prop="assetAccount">
           <el-input v-model="DepositWithdrawal.account" ></el-input>
         </el-form-item>  
         <el-form-item label="登录密码" prop="password">
@@ -171,6 +171,7 @@
     </el-tab-pane>
   </el-tabs>
 </template>
+
 <script>
 var validateMobilePhone = (rule, value, callback) => {
 	if (value === '') {
@@ -208,12 +209,12 @@ var validateEmail = (rule, value, callback) => {
 	}
 };
 
-var validateAccount = (rule, value, callback) => {
+var validateAccountAsset = (rule, value, callback) => {
 	if (value === '') {
 	  callback(new Error('请输入账户号'));
 	} else {
 	  if (value !== '') { 
-	    var reg=/^A\d{5}/;
+	    var reg=/^C\d{5}/;
 	    if(!reg.test(value)){
 	      callback(new Error('请正确填写账户号'));
 	    }
@@ -221,6 +222,21 @@ var validateAccount = (rule, value, callback) => {
 	  callback();
 	}
 };
+
+var validateAccount = (rule, value, callback) => {
+	if (value === '') {
+	  callback(new Error('请输入账户号'));
+	} else {
+	  if (value !== '') { 
+	    var reg=/^[AB]\d{5}/;
+	    if(!reg.test(value)){
+	      callback(new Error('请正确填写账户号'));
+	    }
+	  }
+	  callback();
+	}
+};
+
 var validatePass = (rule, value, callback) => {
   if (value === '') {
     callback(new Error('请输入密码'));
@@ -374,7 +390,9 @@ var validatePass = (rule, value, callback) => {
           ],
           account: [
             { validator: validateAccount, trigger: 'blur' }
-
+          ],
+          assetAccount:[
+            { validator: validateAccountAsset, trigger: 'blur' }
           ]
         },
 

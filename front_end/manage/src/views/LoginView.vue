@@ -192,7 +192,6 @@ var validateMobilePhone = (rule, value, callback) => {
               .catch(function (error) {
                 console.log(error);
               });
-
           }else{
             alert("表单还未完成");
           }

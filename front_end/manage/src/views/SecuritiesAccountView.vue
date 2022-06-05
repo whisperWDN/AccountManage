@@ -165,136 +165,134 @@
 </template>
 
 <script>
-import { alertEffects } from 'element-plus';
 
-	var validateMobilePhone = (rule, value, callback) => {
-	  if (value === '') {
-	    callback(new Error('手机号不可为空'));
-	  } else {
-	    if (value !== '') { 
-	      var reg=/^1[3456789]\d{9}$/;
-	      if(!reg.test(value)){
-	        callback(new Error('请输入有效的手机号码'));
-	      }
+var validateMobilePhone = (rule, value, callback) => {
+	if (value === '') {
+	  callback(new Error('手机号不可为空'));
+	} else {
+	  if (value !== '') { 
+	    var reg=/^1[3456789]\d{9}$/;
+	    if(!reg.test(value)){
+	      callback(new Error('请输入有效的手机号码'));
 	    }
-	    callback();
 	  }
-	};
+	  callback();
+	}
+};
 
-  var validateIDCard = (rule, value, callback)=> {
-	  if (value && (!(/\d{17}[\d|x]|\d{15}/).test(value) || (value.length !== 15 && value.length !== 18))) {
-	    callback(new Error('身份证号码不规范'))
-	  } else {
-	    callback()
-	  }
-	};
+var validateIDCard = (rule, value, callback)=> {
+	if (value && (!(/\d{17}[\d|x]|\d{15}/).test(value) || (value.length !== 15 && value.length !== 18))) {
+	  callback(new Error('身份证号码不规范'))
+	} else {
+	  callback()
+	}
+};
 
-	var validateEmail = (rule, value, callback) => {
-	  if (value === '') {
-	    callback(new Error('请输入邮箱'));
-	  } else {
-	    if (value !== '') { 
-	      var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-	      if(!reg.test(value)){
-	        callback(new Error('请输入有效的邮箱'));
-	      }
+var validateEmail = (rule, value, callback) => {
+	if (value === '') {
+	  callback(new Error('请输入邮箱'));
+	} else {
+	  if (value !== '') { 
+	    var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+	    if(!reg.test(value)){
+	      callback(new Error('请输入有效的邮箱'));
 	    }
-	    callback();
 	  }
-	};
+	  callback();
+	}
+};
 
-	var validateAccount = (rule, value, callback) => {
-	  if (value === '') {
-	     callback(new Error('请输入账户号'));
-	  } else {
-	    if (value !== '') { 
-	      var reg=/^A\d{5}/;
-	      if(!reg.test(value)){
-	        callback(new Error('请正确填写账户号'));
-	      }
+var validateAccount = (rule, value, callback) => {
+	if (value === '') {
+	    callback(new Error('请输入账户号'));
+	} else {
+	  if (value !== '') { 
+	    var reg=/^A\d{5}/;
+	    if(!reg.test(value)){
+	      callback(new Error('请正确填写账户号'));
 	    }
-	    callback();
 	  }
-	};
-  var validatePass = (rule, value, callback) => {
+	  callback();
+	}
+};
+var validatePass = (rule, value, callback) => {
+  if (value === '') {
+    callback(new Error('请输入密码'));
+  } else {
+	  if (value !== '') { 
+	    var reg=/[\w,_]{6,20}/;
+	    if(!reg.test(value)){
+	      callback(new Error('请输入有效的密码'));
+	    }
+	  }
+    callback();
+  }
+};
+
+export default {
+  name:"SecuritiesAccountView",
+  data() {
+    var validatePass2 = (rule, value, callback) => {
     if (value === '') {
-      callback(new Error('请输入密码'));
+      callback(new Error('请再次输入密码'));
+    } else if (value !== this.openAccount.password) {
+      callback(new Error('两次输入密码不一致!'));
     } else {
-	    if (value !== '') { 
-	      var reg=/[\w,_]{6,20}/;
-	      if(!reg.test(value)){
-	        callback(new Error('请输入有效的密码'));
-	      }
-	    }
       callback();
     }
   };
-
-  export default {
-    name:"SecuritiesAccountView",
-    
-    data() {
-        var validatePass2 = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请再次输入密码'));
-        } else if (value !== this.openAccount.password) {
-          callback(new Error('两次输入密码不一致!'));
-        } else {
-          callback();
-        }
-      };
-      var validatePass3 = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请再次输入密码'));
-        } else if (value !== this.reOpenAccount.password) {
-          callback(new Error('两次输入密码不一致!'));
-        } else {
-          callback();
-        }
-      };
-      return {
-        activeName: 'second',
-        openAccount: {
-          name: '',
-          gender: '',
-          license: '',
-          address: '',
-          profession: '',
-          education:'',
-          company:'',
-          password:'',
-          confirm:'',
-          phone:'',
-          email:''
-        },
-        lossRegister:{
-          license: '',
-          account:'',
-          password:''
-        },
-        closeAccount:{
-          license: '',
-          account:'',
-          password:''
-        },
-        reOpen:{
-          license: '',
-          account:'',
-          password:''
-        },
-        reOpenAccount: {
-          name: '',
-          gender: '',
-          license: '',
-          address: '',
-          profession: '',
-          education:'',
-          company:'',
-          password:'',
-          confirm:'',
-          phone:'',
-          email:''
-        },
+  var validatePass3 = (rule, value, callback) => {
+    if (value === '') {
+      callback(new Error('请再次输入密码'));
+    } else if (value !== this.reOpenAccount.password) {
+      callback(new Error('两次输入密码不一致!'));
+    } else {
+      callback();
+    }
+  };
+  return {
+    activeName: 'second',
+    openAccount: {
+      name: '',
+      gender: '',
+      license: '',
+      address: '',
+      profession: '',
+      education:'',
+      company:'',
+      password:'',
+      confirm:'',
+      phone:'',
+      email:''
+    },
+    lossRegister:{
+      license: '',
+      account:'',
+      password:''
+    },
+    closeAccount:{
+      license: '',
+      account:'',
+      password:''
+    },
+    reOpen:{
+      license: '',
+      account:'',
+      password:''
+    },
+    reOpenAccount: {
+      name: '',
+      gender: '',
+      license: '',
+      address: '',
+      profession: '',
+      education:'',
+      company:'',
+      password:'',
+      confirm:'',
+      phone:'',
+      email:''
+    },
         rules: {
           name: [
             { required: true, message: '请输入姓名', trigger: 'blur' },

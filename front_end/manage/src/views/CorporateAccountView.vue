@@ -185,6 +185,7 @@
     </el-tab-pane>
   </el-tabs>
 </template>
+
 <script>
 var validateMobilePhone = (rule, value, callback) => {
 	if (value === '') {
@@ -227,7 +228,7 @@ var validateAccount = (rule, value, callback) => {
 	  callback(new Error('请输入账户号'));
 	  } else {
 	    if (value !== '') { 
-	      var reg=/^A\d{5}/;
+	      var reg=/^B\d{5}/;
 	      if(!reg.test(value)){
 	        callback(new Error('请正确填写账户号'));
 	      }
