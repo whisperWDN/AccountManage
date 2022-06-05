@@ -4,7 +4,7 @@
       <SideBar :login="login" :administrator='administrator'/>
     </el-aside>
     <el-main>
-      <router-view></router-view>
+      <router-view @change="changeS"></router-view>
     </el-main>
   </el-container>
 </template>
@@ -21,6 +21,13 @@ export default {
     return{
       login:false,
       administrator:'whisper'
+    }
+  },
+  method:{
+    changeS(data){
+      this.login=true
+      console.log(this.login)
+      // this
     }
   }
 };

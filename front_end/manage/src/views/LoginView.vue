@@ -1,7 +1,7 @@
 <template>
   <el-tabs v-model="activeName" @tab-click="handleClick">
     <el-tab-pane label="登录" name="first" >
-      <el-form ref="LoginForm" :model="Login" label-width="80px" :rules="rules">
+      <el-form ref="LoginForm" :model="Login" label-width="80px" >
         <el-form-item label="用户名">
           <el-input v-model="Login.username" ></el-input>
         </el-form-item>  
@@ -9,7 +9,7 @@
           <el-input type="password" v-model="Login.password" ></el-input>
         </el-form-item> 
         <el-form-item>
-          <el-button type="primary" @click="login('LoginForm')">登录</el-button>
+          <el-button type="primary" @click="login">登录</el-button>
         </el-form-item> 
       </el-form>
     </el-tab-pane>
@@ -107,19 +107,20 @@ import App from '../App.vue'
       callback();
     }
   };
-  var validatePass2 = (rule, value, callback) => {
-    if (value === '') {
-      callback(new Error('请再次输入密码'));
-    } else if (value !== this.Register.password) {
-      callback(new Error('两次输入密码不一致!'));
-    } else {
-      callback();
-    }
-  };
+
 
   export default {
     name:"LoginView",
     data() {
+      var validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'));
+        } else if (value !== this.Register.password) {
+          callback(new Error('两次输入密码不一致!'));
+        } else {
+          callback();
+        }
+      };
       return {
         activeName: 'first',
         Register: {
@@ -133,8 +134,8 @@ import App from '../App.vue'
           confirm:'',
         },
         Login:{
-            username:'',
-            password:''
+          username:'',
+          password:''
         },
         rules: {
           name: [
@@ -163,24 +164,21 @@ import App from '../App.vue'
       };
     },
     methods: {
-      login(formName){
-        this.$refs[formName].validate(valid =>{
-          if(valid){
-            this.$http.post('/login',this.$qs.stringify(this.openAccount))
-              .then(response => {
-                alert(response.data);
-              })
-              .catch(function (error) {
-                console.log(error);
-            });
-            // this.$router.push('/whisper')
-            App.$emit('login',true)
-            App.$emit('administrator','whisper')
+      login(){
+        console.log('change');
 
-          }else{
-            alert("表单还未完成");
-          }
-        })
+        this.$http.post('/login',this.$qs.stringify(this.openAccount))
+          .then(response => {
+            alert(response.data);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+            // this.$router.push('/whisper')
+        console.log('change2');
+
+        this.$emit('change','true')
+
      },
      register(formName){
         this.$refs[formName].validate(valid =>{

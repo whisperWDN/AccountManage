@@ -90,7 +90,7 @@
           <el-input v-model="reOpen.account"></el-input>
         </el-form-item>  
         <el-form-item label="密码" prop="password">
-          <el-input v-model="reOpen.password"></el-input>
+          <el-input v-model="reOpen.password" type="password"></el-input>
         </el-form-item>  
         <el-form-item label="身份证号" prop="license">
           <el-input v-model="reOpen.license"></el-input>
@@ -388,7 +388,7 @@ var validatePass = (rule, value, callback) => {
           }
         })
       },
-      pre_reopen(){
+      pre_reopen(formName){
         this.$refs[formName].validate(valid =>{
           if(valid){
             this.$http.post('/security/co_re_register',this.$qs.stringify(this.reOpen))
@@ -404,7 +404,7 @@ var validatePass = (rule, value, callback) => {
           }
         })
       },
-      reopen(){
+      reopen(formName){
         this.$refs[formName].validate(valid =>{
           if(valid){
             this.$http.post('/security/co_re_register2',this.$qs.stringify(this.reOpenAccount))

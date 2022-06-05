@@ -80,7 +80,7 @@
           <el-input v-model="reOpen.account" ></el-input>
         </el-form-item>  
         <el-form-item label="密码" prop="password">
-          <el-input v-model="reOpen.password" ></el-input>
+          <el-input v-model="reOpen.password" type="password"></el-input>
         </el-form-item>  
         <el-form-item label="身份证号" prop="license">
           <el-input v-model="reOpen.license" ></el-input>
@@ -357,7 +357,7 @@
           }
         })
       },
-      pre_reopen(){
+      pre_reopen(formName){
         this.$refs[formName].validate(valid =>{
           if(valid){
             this.$http.post('/security/re_register',this.$qs.stringify(this.reOpen))
