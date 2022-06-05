@@ -227,27 +227,29 @@
       callback();
     }
   };
-  var validatePass2 = (rule, value, callback) => {
-    if (value === '') {
-      callback(new Error('请再次输入密码'));
-    } else if (value !== this.openAccount.password) {
-      callback(new Error('两次输入密码不一致!'));
-    } else {
-      callback();
-    }
-  };
-  var validatePass3 = (rule, value, callback) => {
-    if (value === '') {
-      callback(new Error('请再次输入密码'));
-    } else if (value !== this.reOpenAccount.password) {
-      callback(new Error('两次输入密码不一致!'));
-    } else {
-      callback();
-    }
-  };
+
   export default {
     name:"SecuritiesAccountView",
+    
     data() {
+        var validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'));
+        } else if (value !== this.openAccount.password) {
+          callback(new Error('两次输入密码不一致!'));
+        } else {
+          callback();
+        }
+      };
+      var validatePass3 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'));
+        } else if (value !== this.reOpenAccount.password) {
+          callback(new Error('两次输入密码不一致!'));
+        } else {
+          callback();
+        }
+      };
       return {
         activeName: 'second',
         openAccount: {
@@ -308,7 +310,7 @@
             {required: true,validator: validateMobilePhone, trigger: 'blur' }
           ],
           password: [
-            {required: true,validator: validatePass, trigger: 'blur' }
+            {required: true, validator: validatePass, trigger: 'blur' }
           ],
           confirm: [
             { validator: validatePass2, trigger: 'blur' }
@@ -321,7 +323,7 @@
           ]
         },
 
-        status:false
+        status:true
       };
     },
     methods: {
@@ -361,6 +363,7 @@
             this.$http.post('/security/re_register',this.$qs.stringify(this.reOpen))
               .then(response => {
                 console.log(response.data);
+                this.status = false
               })
               .catch(function (error) {
                 console.log(error);

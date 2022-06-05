@@ -13,12 +13,13 @@
           <span>管理员</span>
           <div v-if="login">
             <span>{{administrator}}</span>
-            <el-button type="primary" @click="closeA">注销</el-button>
+            <a @click="closeA">注销</a>
           </div>
           <div v-else>
             <router-link to="/login">登录/注册</router-link>
           </div>
         </el-menu-item>
+        
         <el-sub-menu index="2">
           <template #title>
             <span slot="title">证券账户</span>
@@ -49,9 +50,13 @@ export default {
     name:"SideBar",
     data(){
       return {
-        login:false,
+
         administrator:'',
       }
+    },
+    props:{
+      login:Boolean,
+      administrator:String,
     },
     methods: {
       handleOpen(key, keyPath) {
@@ -95,4 +100,4 @@ export default {
 .el-menu{
   height: 700px;
 }
-</style>>
+</style>

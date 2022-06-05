@@ -58,10 +58,10 @@
         </el-row>
 
         <el-form-item label="密码" prop="password">
-          <el-input v-model="openAccount.password" ></el-input>
+          <el-input v-model="openAccount.password" type="password"></el-input>
         </el-form-item>        
         <el-form-item label="确认密码" prop="confirm">
-          <el-input v-model="openAccount.confirm" ></el-input>
+          <el-input v-model="openAccount.confirm" type="password"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="open('openAccountForm')">开户</el-button>
@@ -156,10 +156,10 @@
         </el-row>
 
         <el-form-item label="密码" prop="password">
-          <el-input v-model="reOpenAccount.password"></el-input>
+          <el-input v-model="reOpenAccount.password" type="password"></el-input>
         </el-form-item>        
         <el-form-item label="确认密码" prop="confirm2">
-          <el-input v-model="reOpenAccount.confirm"></el-input>
+          <el-input v-model="reOpenAccount.confirm" type="password"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="reopen('reOpenAccountForm')">重新开户</el-button>
@@ -186,71 +186,72 @@
   </el-tabs>
 </template>
 <script>
+var validateMobilePhone = (rule, value, callback) => {
+	if (value === '') {
+	  callback(new Error('手机号不可为空'));
+	} else {
+	  if (value !== '') { 
+	    var reg=/^1[3456789]\d{9}$/;
+	    if(!reg.test(value)){
+	      callback(new Error('请输入有效的手机号码'));
+	    }
+	  }
+	  callback();
+	}
+};
+
+var validateIDCard = (rule, value, callback)=> {
+	if (value && (!(/\d{17}[\d|x]|\d{15}/).test(value) || (value.length !== 15 && value.length !== 18))) {
+	  callback(new Error('身份证号码不规范'))
+	  } else {
+	    callback()
+	  }
+	};
+
+var validateEmail = (rule, value, callback) => {
+	if (value === '') {
+	  callback(new Error('请输入邮箱'));
+	} else {
+	  if (value !== '') { 
+	    var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+	    if(!reg.test(value)){
+	    callback(new Error('请输入有效的邮箱'));
+	    }
+	  }
+	  callback();
+	}
+};
+
+var validateAccount = (rule, value, callback) => {
+	if (value === '') {
+	  callback(new Error('请输入账户号'));
+	  } else {
+	    if (value !== '') { 
+	      var reg=/^A\d{5}/;
+	      if(!reg.test(value)){
+	        callback(new Error('请正确填写账户号'));
+	      }
+	    }
+	    callback();
+	  }
+};
+var validatePass = (rule, value, callback) => {
+  if (value === '') {
+    callback(new Error('请输入密码'));
+  } else {
+	  if (value !== '') { 
+	    var reg=/[\w,_]{6,20}/;
+	    if(!reg.test(value)){
+	      callback(new Error('请输入有效的密码'));
+	    }
+	  }
+    callback();
+    }
+};
   export default {
     name:"CorporateAccountView",
     data() {
-      	    var validateMobilePhone = (rule, value, callback) => {
-	      if (value === '') {
-	        callback(new Error('手机号不可为空'));
-	      } else {
-	        if (value !== '') { 
-	          var reg=/^1[3456789]\d{9}$/;
-	          if(!reg.test(value)){
-	            callback(new Error('请输入有效的手机号码'));
-	          }
-	        }
-	        callback();
-	      }
-	    };
 
-    	var validateIDCard = (rule, value, callback)=> {
-	      if (value && (!(/\d{17}[\d|x]|\d{15}/).test(value) || (value.length !== 15 && value.length !== 18))) {
-	        callback(new Error('身份证号码不规范'))
-	      } else {
-	        callback()
-	      }
-	    };
-
-	    var validateEmail = (rule, value, callback) => {
-	      if (value === '') {
-	        callback(new Error('请输入邮箱'));
-	      } else {
-	        if (value !== '') { 
-	          var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-	          if(!reg.test(value)){
-	            callback(new Error('请输入有效的邮箱'));
-	          }
-	        }
-	        callback();
-	      }
-	    };
-
-	    var validateAccount = (rule, value, callback) => {
-	      if (value === '') {
-	        callback(new Error('请输入账户号'));
-	      } else {
-	        if (value !== '') { 
-	          var reg=/^A\d{5}/;
-	          if(!reg.test(value)){
-	            callback(new Error('请正确填写账户号'));
-	          }
-	        }
-	        callback();
-	      }
-	    };
-      var validatePass = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入密码'));
-        } else {
-	        if (value !== '') { 
-	          var reg=/[\w,_]{6,20}/;
-	          if(!reg.test(value)){
-	            callback(new Error('请输入有效的密码'));
-	          }
-	        }
-          callback();
-        }
-      };
       var validatePass2 = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请再次输入密码'));
@@ -333,15 +334,13 @@
             { validator: validateIDCard, trigger: 'blur' }
           ],
           email: [
-
-
             { validator: validateEmail, trigger: 'blur' }
           ],
           phone: [
             { validator: validateMobilePhone, trigger: 'blur' }
           ],
           password: [
-            { validator: validatePass, trigger: 'blur' }
+            { required: true,validator: validatePass, trigger: 'blur' }
           ],
           confirm: [
             { validator: validatePass2, trigger: 'blur' }
@@ -351,12 +350,11 @@
           ],
 
           account: [
-            { validator: validateAccount, trigger: 'blur' }
+            { required: true,validator: validateAccount, trigger: 'blur' }
 
           ]
         },
-
-        status:false
+        status:true
       };
     },
     methods: {
@@ -396,6 +394,7 @@
             this.$http.post('/security/co_re_register',this.$qs.stringify(this.reOpen))
               .then(response => {
                 console.log(response.data);
+                this.status = true
               })
               .catch(function (error) {
                 console.log(error);

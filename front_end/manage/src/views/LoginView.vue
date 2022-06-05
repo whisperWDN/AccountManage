@@ -192,6 +192,7 @@ import App from '../App.vue'
               .catch(function (error) {
                 console.log(error);
               });
+              this.activeName = "second"
           }else{
             alert("表单还未完成");
           }

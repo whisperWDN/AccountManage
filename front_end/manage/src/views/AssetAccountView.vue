@@ -68,7 +68,7 @@
         </el-form-item>
       </el-form>
 
-      <el-form ref="reOpenAccountForm" :model="reOpenAccount" label-width="200px" :rules="rules">
+      <el-form ref="reOpenAccountForm" :model="reOpenAccount" label-width="200px" :rules="rules" v-else>
 
         <el-form-item label="证券账户号" prop="account">
           <el-input v-model="reOpenAccount.account"></el-input>
@@ -172,71 +172,72 @@
   </el-tabs>
 </template>
 <script>
+var validateMobilePhone = (rule, value, callback) => {
+	if (value === '') {
+	  callback(new Error('手机号不可为空'));
+	} else {
+	  if (value !== '') { 
+	    var reg=/^1[3456789]\d{9}$/;
+	    if(!reg.test(value)){
+	      callback(new Error('请输入有效的手机号码'));
+	    }
+	  }
+	  callback();
+	}
+};
+
+var validateIDCard = (rule, value, callback)=> {
+	if (value && (!(/\d{17}[\d|x]|\d{15}/).test(value) || (value.length !== 15 && value.length !== 18))) {
+	  callback(new Error('身份证号码不规范'))
+	} else {
+	  callback()
+	}
+};
+
+var validateEmail = (rule, value, callback) => {
+	if (value === '') {
+	  callback(new Error('请输入邮箱'));
+	} else {
+	  if (value !== '') { 
+	    var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+	    if(!reg.test(value)){
+	      callback(new Error('请输入有效的邮箱'));
+	    }
+	  }
+	  callback();
+	}
+};
+
+var validateAccount = (rule, value, callback) => {
+	if (value === '') {
+	  callback(new Error('请输入账户号'));
+	} else {
+	  if (value !== '') { 
+	    var reg=/^A\d{5}/;
+	    if(!reg.test(value)){
+	      callback(new Error('请正确填写账户号'));
+	    }
+	  }
+	  callback();
+	}
+};
+var validatePass = (rule, value, callback) => {
+  if (value === '') {
+    callback(new Error('请输入密码'));
+  } else {
+	  if (value !== '') { 
+	    var reg=/[\w,_]{6,20}/;
+	    if(!reg.test(value)){
+	      callback(new Error('请输入有效的密码'));
+	    }
+	  }else
+    callback();
+  }
+};
   export default {
     name:"AssetAccountView",
     data() {
-        var validateMobilePhone = (rule, value, callback) => {
-	      if (value === '') {
-	        callback(new Error('手机号不可为空'));
-	      } else {
-	        if (value !== '') { 
-	          var reg=/^1[3456789]\d{9}$/;
-	          if(!reg.test(value)){
-	            callback(new Error('请输入有效的手机号码'));
-	          }
-	        }
-	        callback();
-	      }
-	    };
 
-    	var validateIDCard = (rule, value, callback)=> {
-	      if (value && (!(/\d{17}[\d|x]|\d{15}/).test(value) || (value.length !== 15 && value.length !== 18))) {
-	        callback(new Error('身份证号码不规范'))
-	      } else {
-	        callback()
-	      }
-	    };
-
-	    var validateEmail = (rule, value, callback) => {
-	      if (value === '') {
-	        callback(new Error('请输入邮箱'));
-	      } else {
-	        if (value !== '') { 
-	          var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-	          if(!reg.test(value)){
-	            callback(new Error('请输入有效的邮箱'));
-	          }
-	        }
-	        callback();
-	      }
-	    };
-
-	    var validateAccount = (rule, value, callback) => {
-	      if (value === '') {
-	        callback(new Error('请输入账户号'));
-	      } else {
-	        if (value !== '') { 
-	          var reg=/^A\d{5}/;
-	          if(!reg.test(value)){
-	            callback(new Error('请正确填写账户号'));
-	          }
-	        }
-	        callback();
-	      }
-	    };
-      var validatePass = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入密码'));
-        } else {
-	        if (value !== '') { 
-	          var reg=/[\w,_]{6,20}/;
-	          if(!reg.test(value)){
-	            callback(new Error('请输入有效的密码'));
-	          }
-	        }else
-          callback();
-        }
-      };
       var validatePass2 = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请再次输入密码'));
@@ -377,7 +378,7 @@
           ]
         },
 
-        status:false
+        status:true
       };
     },
     methods: {
@@ -417,6 +418,7 @@
             this.$http.post('/fund/re_register',this.$qs.stringify(this.reOpen))
               .then(response => {
                 console.log(response.data);
+                this.status = false
               })
               .catch(function (error) {
                 console.log(error);

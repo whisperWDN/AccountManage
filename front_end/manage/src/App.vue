@@ -1,7 +1,7 @@
 <template>
   <el-container >
     <el-aside width="200px">
-      <SideBar />
+      <SideBar :login="login" :administrator='administrator'/>
     </el-aside>
     <el-main>
       <router-view></router-view>
@@ -17,6 +17,12 @@ export default {
   components: {
     SideBar,
   },
+  data(){
+    return{
+      login:false,
+      administrator:'whisper'
+    }
+  }
 };
 </script>
 
