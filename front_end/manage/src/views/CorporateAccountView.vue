@@ -1,7 +1,7 @@
 <template>
   <el-tabs v-model="activeName" @tab-click="handleClick">
     <el-tab-pane label="开户" name="first">
-      <el-form ref="ruleForm" :model="openAccount" label-width="200px" :rules="rules">
+      <el-form ref="openAccountForm" :model="openAccount" label-width="200px" :rules="rules">
 
         <el-form-item label="法人股票账户号码">
           <el-input v-model="openAccount.stock_account" ></el-input>
@@ -64,12 +64,12 @@
           <el-input v-model="openAccount.confirm" ></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="open">开户</el-button>
+          <el-button type="primary" @click="open('openAccountForm')">开户</el-button>
         </el-form-item>
       </el-form>
     </el-tab-pane>
     <el-tab-pane label="挂失" name="second">
-      <el-form ref="ruleForm" :model="lossRegister" label-width="80px" :rules="rules">
+      <el-form ref="lossRegisterForm" :model="lossRegister" label-width="80px" :rules="rules">
         <el-form-item label="账户号" prop="account">
           <el-input v-model="lossRegister.account" ></el-input>
         </el-form-item>  
@@ -80,12 +80,12 @@
           <el-input v-model="lossRegister.license" ></el-input>
         </el-form-item>  
         <el-form-item>
-          <el-button type="primary" @click="loss">挂失</el-button>
+          <el-button type="primary" @click="loss('lossRegisterForm')">挂失</el-button>
         </el-form-item>
       </el-form>
     </el-tab-pane>
     <el-tab-pane label="重新开户" name="third">
-      <el-form ref="ruleForm" :model="reOpen" label-width="80px" :rules="rules" v-if="status">
+      <el-form ref="reOpenForm" :model="reOpen" label-width="80px" :rules="rules" v-if="status">
         <el-form-item label="账户号" prop="account">
           <el-input v-model="reOpen.account"></el-input>
         </el-form-item>  
@@ -96,10 +96,10 @@
           <el-input v-model="reOpen.license"></el-input>
         </el-form-item>  
         <el-form-item>
-          <el-button type="primary" @click="pre_reopen">补办</el-button>
+          <el-button type="primary" @click="pre_reopen('reOpenForm')">补办</el-button>
         </el-form-item>
       </el-form>
-      <el-form ref="ruleForm" :model="reOpenAccount" label-width="200px" :rules="rules" v-else>
+      <el-form ref="reOpenAccountForm" :model="reOpenAccount" label-width="200px" :rules="rules" v-else>
 
         <el-form-item label="法人股票账户号码">
           <el-input v-model="reOpenAccount.stock_account"></el-input>
@@ -162,13 +162,13 @@
           <el-input v-model="reOpenAccount.confirm"></el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="reopen">重新开户</el-button>
+          <el-button type="primary" @click="reopen('reOpenAccountForm')">重新开户</el-button>
         </el-form-item>
       </el-form>
 
     </el-tab-pane>
     <el-tab-pane label="销户" name="fourth">
-      <el-form ref="ruleForm" :model="closeAccount" label-width="80px" :rules="rules">
+      <el-form ref="closeAccountForm" :model="closeAccount" label-width="80px" :rules="rules">
         <el-form-item label="账户号" prop="account">
           <el-input v-model="closeAccount.account"></el-input>
         </el-form-item>  
@@ -179,7 +179,7 @@
           <el-input v-model="closeAccount.license"></el-input>
         </el-form-item>  
         <el-form-item>
-          <el-button type="primary" @click="close">销户</el-button>
+          <el-button type="primary" @click="close('closeAccountForm')">销户</el-button>
         </el-form-item>
       </el-form>
     </el-tab-pane>
@@ -360,51 +360,80 @@
       };
     },
     methods: {
-
-      open(){
-        this.$http.post('/security/co_register',this.$qs.stringify(this.openAccount))
-          .then(response => {
-            alert(response.data);
-            })
-          .catch(function (error) {
-            console.log(error);
-        });
+      open(formName){
+        this.$refs[formName].validate(valid =>{
+          if(valid){
+            this.$http.post('/security/co_register',this.$qs.stringify(this.openAccount))
+              .then(response => {
+                alert(response.data);
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+          }else{
+            alert("表单还未完成");
+          }
+        })
       },
-      loss(){
-        this.$http.post('/security/co_lost',this.$qs.stringify(this.lossRegister))
-          .then(response => {
-            console.log(response.data);
-            })
-          .catch(function (error) {
-            console.log(error);
-        });
+      loss(formName){
+        this.$refs[formName].validate(valid =>{
+          if(valid){
+              this.$http.post('/security/co_lost',this.$qs.stringify(this.lossRegister))
+                .then(response => {
+                  console.log(response.data);
+                })
+              .catch(function (error) {
+              console.log(error);
+            });
+          }else{
+            alert("表单还未完成");
+          }
+        })
       },
       pre_reopen(){
-        this.$http.post('/security/co_re_register',this.$qs.stringify(this.reOpen))
-          .then(response => {
-            console.log(response.data);
-            })
-          .catch(function (error) {
-            console.log(error);
-        });
+        this.$refs[formName].validate(valid =>{
+          if(valid){
+            this.$http.post('/security/co_re_register',this.$qs.stringify(this.reOpen))
+              .then(response => {
+                console.log(response.data);
+              })
+              .catch(function (error) {
+                console.log(error);
+            });
+          }else{
+            alert("表单还未完成");
+          }
+        })
       },
       reopen(){
-        this.$http.post('/security/co_re_register2',this.$qs.stringify(this.reOpenAccount))
-          .then(response => {
-            console.log(response.data);
-            })
-          .catch(function (error) {
-            console.log(error);
-        });
+        this.$refs[formName].validate(valid =>{
+          if(valid){
+            this.$http.post('/security/co_re_register2',this.$qs.stringify(this.reOpenAccount))
+              .then(response => {
+                console.log(response.data);
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
+          }else{
+            alert("表单还未完成");
+          }
+        })
       },
       close(){
-        this.$http.post('/security/co_delete',this.$qs.stringify(this.closeAccount))
-          .then(response => {
-            console.log(response.data);
-            })
-          .catch(function (error) {
-            console.log(error);
-        });      
+        this.$refs[formName].validate(valid =>{
+          if(valid){
+            this.$http.post('/security/co_delete',this.$qs.stringify(this.closeAccount))
+              .then(response => {
+                console.log(response.data);
+                })
+              .catch(function (error) {
+                console.log(error);
+              }); 
+          }else{
+            alert("表单还未完成");
+          }
+        })
       }
     }
   };

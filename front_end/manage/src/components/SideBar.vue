@@ -11,6 +11,13 @@
         active-text-color="#ffd04b">
         <el-menu-item index="1">
           <span>管理员</span>
+          <div v-if="login">
+            <span>{{administrator}}</span>
+            <el-button type="primary" @click="closeA">注销</el-button>
+          </div>
+          <div v-else>
+            <router-link to="/login">登录/注册</router-link>
+          </div>
         </el-menu-item>
         <el-sub-menu index="2">
           <template #title>
@@ -37,14 +44,25 @@
 </template>
 
 <script>
+import App from '../App.vue'
 export default {
     name:"SideBar",
+    data(){
+      return {
+        login:false,
+        administrator:'',
+      }
+    },
     methods: {
       handleOpen(key, keyPath) {
         console.log(key, keyPath);
       },
       handleClose(key, keyPath) {
         console.log(key, keyPath);
+      },
+      closeA(){
+        this.login = false
+        this.administrator = ''
       },
       hrefToSA(){
         this.$router.push({ path:'/SecuritiesAccount'})
@@ -61,6 +79,14 @@ export default {
       hrefToCheckA(){
         this.$router.push({ path:'/CheckA'})
       }
+    },
+    mounted(){
+      // bus.$on('login', val => {
+      //   this.login = val
+      // })
+      // bus.$on('administrator', val => {
+      //   this.administrator = val
+      // })
     }
 }
 </script>

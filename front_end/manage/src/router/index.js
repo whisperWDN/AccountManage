@@ -5,13 +5,19 @@ import CorporateAccountView from '../views/CorporateAccountView.vue'
 import AssetAccountView from '../views/AssetAccountView.vue'
 import CheckSView from '../views/CheckSView.vue'
 import CheckAView from '../views/CheckAView.vue'
+import LoginView from '../views/LoginView.vue'
 
 const routes = [
   {
-    path: '/',
-    name: 'home',
-    component: HomeView
+    path:'',
+    //重定向
+    redirect:'/login'
   },
+  {
+    path: '/login',
+    name: 'Login',
+    component: LoginView
+  },  
   {
     path: '/CorporateAccount',
     name: 'CorporateAccount',

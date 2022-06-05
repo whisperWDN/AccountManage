@@ -69,16 +69,13 @@ import CheckForm from "@/components/CheckForm.vue";
       }
     },
     methods: {
-      // handleClose(done) {
-      //   this.$confirm('还有未保存的工作哦确定关闭吗？')
-      //     .then(_ => {
-      //       done();
-      //     })
-      //     .catch(_ => {});
-      // }
+      
     },
     components: {
       CheckForm
     },
+    mounted(){
+      
+    }
   }
 </script>
