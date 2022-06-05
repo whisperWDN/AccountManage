@@ -1,10 +1,10 @@
 <template>
   <el-container >
     <el-aside width="200px">
-      <SideBar :login="login" :administrator='administrator'/>
+      <SideBar />
     </el-aside>
     <el-main>
-      <router-view @change="changeS"></router-view>
+      <router-view></router-view>
     </el-main>
   </el-container>
 </template>
@@ -19,16 +19,11 @@ export default {
   },
   data(){
     return{
-      login:false,
-      administrator:'whisper'
+
     }
   },
   method:{
-    changeS(data){
-      this.login=true
-      console.log(this.login)
-      // this
-    }
+
   }
 };
 </script>

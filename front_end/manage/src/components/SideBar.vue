@@ -10,13 +10,13 @@
         text-color="#fff"
         active-text-color="#ffd04b">
         <el-menu-item index="1">
-          <span>管理员</span>
-          <div v-if="login">
-            <span>{{administrator}}</span>
-            <a @click="closeA">注销</a>
+          <span style="width: 60px">管理员</span>
+          <div v-if="this.$store.state.logState">
+            <span  style="margin-right: 10px;">{{this.$store.state.administrator}}</span>
+            <span @click="closeA" style="color: greenyellow">注销</span>
           </div>
           <div v-else>
-            <router-link to="/login">登录/注册</router-link>
+            <router-link to="/login" style="color: greenyellow">登录/注册</router-link>
           </div>
         </el-menu-item>
         
@@ -45,19 +45,16 @@
 </template>
 
 <script>
-import App from '../App.vue'
+
+
 export default {
     name:"SideBar",
     data(){
       return {
 
-        administrator:'',
       }
     },
-    props:{
-      login:Boolean,
-      administrator:String,
-    },
+
     methods: {
       handleOpen(key, keyPath) {
         console.log(key, keyPath);
@@ -66,8 +63,8 @@ export default {
         console.log(key, keyPath);
       },
       closeA(){
-        this.login = false
-        this.administrator = ''
+        this.$store.commit('changeLogState',false)
+        this.$store.commit('setAdministrator','')
       },
       hrefToSA(){
         this.$router.push({ path:'/SecuritiesAccount'})
@@ -86,12 +83,7 @@ export default {
       }
     },
     mounted(){
-      // bus.$on('login', val => {
-      //   this.login = val
-      // })
-      // bus.$on('administrator', val => {
-      //   this.administrator = val
-      // })
+
     }
 }
 </script>

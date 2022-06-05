@@ -165,6 +165,8 @@
 </template>
 
 <script>
+import { alertEffects } from 'element-plus';
+
 	var validateMobilePhone = (rule, value, callback) => {
 	  if (value === '') {
 	    callback(new Error('手机号不可为空'));
@@ -347,7 +349,7 @@
           if(valid){
               this.$http.post('/security/lost',this.$qs.stringify(this.lossRegister))
                 .then(response => {
-                  console.log(response.data);
+                  alert(response.data['answer']);
                 })
               .catch(function (error) {
               console.log(error);

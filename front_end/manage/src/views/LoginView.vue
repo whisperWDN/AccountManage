@@ -57,20 +57,19 @@
 </template>
 
 <script>
-import App from '../App.vue'
-	var validateMobilePhone = (rule, value, callback) => {
-	  if (value === '') {
-	    callback(new Error('手机号不可为空'));
-	  } else {
-	    if (value !== '') { 
-	      var reg=/^1[3456789]\d{9}$/;
-	      if(!reg.test(value)){
-	        callback(new Error('请输入有效的手机号码'));
-	      }
+var validateMobilePhone = (rule, value, callback) => {
+	if (value === '') {
+	  callback(new Error('手机号不可为空'));
+	} else {
+	  if (value !== '') { 
+	    var reg=/^1[3456789]\d{9}$/;
+	    if(!reg.test(value)){
+	      callback(new Error('请输入有效的手机号码'));
 	    }
-	    callback();
 	  }
-	};
+	  callback();
+	}
+};
 
   var validateIDCard = (rule, value, callback)=> {
 	  if (value && (!(/\d{17}[\d|x]|\d{15}/).test(value) || (value.length !== 15 && value.length !== 18))) {
@@ -111,6 +110,7 @@ import App from '../App.vue'
 
   export default {
     name:"LoginView",
+
     data() {
       var validatePass2 = (rule, value, callback) => {
         if (value === '') {
@@ -165,32 +165,34 @@ import App from '../App.vue'
     },
     methods: {
       login(){
-        console.log('change');
-
         this.$http.post('/login',this.$qs.stringify(this.openAccount))
           .then(response => {
-            alert(response.data);
+            if(response.data['answer']==='ok'){
+              this.$store.commit('changeLogState',true)
+              this.$store.commit('setAdministrator','whisper')
+            }else{
+              alert(response.data['answer']);
+            }
           })
           .catch(function (error) {
             console.log(error);
           });
-            // this.$router.push('/whisper')
-        console.log('change2');
-
-        this.$emit('change','true')
-
      },
      register(formName){
         this.$refs[formName].validate(valid =>{
           if(valid){
             this.$http.post('/register',this.$qs.stringify(this.openAccount))
               .then(response => {
-                alert(response.data);
+                if(response.data['answer']==='ok'){
+                  this.activeName = "first"
+                }else{
+                  alert(response.data['answer']);
+                }
               })
               .catch(function (error) {
                 console.log(error);
               });
-              this.activeName = "second"
+
           }else{
             alert("表单还未完成");
           }
