@@ -10,7 +10,7 @@
         text-color="#fff"
         active-text-color="#ffd04b">
         <el-menu-item index="1">
-          <span style="width: 60px">管理员</span>
+          <span style="width: 60px">工作人员</span>
           <div v-if="this.$store.state.logState">
             <span  style="margin-right: 10px;">{{this.$store.state.administrator}}</span>
             <span @click="closeA" style="color: greenyellow">注销</span>
@@ -28,15 +28,15 @@
 
           <el-menu-item index="2-2" @click="hrefToCA">法人账户</el-menu-item>
 
-          <!-- <el-menu-item  @click="hrefToCS">
+          <el-menu-item  @click="hrefToCS">
             <span slot="title" >审核</span>
-          </el-menu-item> -->
+          </el-menu-item>
         </el-sub-menu>
         <el-sub-menu index="3">
           <template #title>资金账户</template>
           <el-menu-item index="3-1" @click="hrefToAA">账户管理</el-menu-item>
 
-          <!-- <el-menu-item index="3-2" @click="hrefToCheckA">审核</el-menu-item> -->
+          <el-menu-item index="3-2" @click="hrefToCheckA">审核</el-menu-item>
         </el-sub-menu>
 
       </el-menu>

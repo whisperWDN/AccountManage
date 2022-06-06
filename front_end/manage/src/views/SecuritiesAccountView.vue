@@ -170,69 +170,8 @@
 </template>
 
 <script>
-
-var validateMobilePhone = (rule, value, callback) => {
-	if (value === '') {
-	  callback(new Error('手机号不可为空'));
-	} else {
-	  if (value !== '') { 
-	    var reg=/^1[3456789]\d{9}$/;
-	    if(!reg.test(value)){
-	      callback(new Error('请输入有效的手机号码'));
-	    }
-	  }
-	  callback();
-	}
-};
-
-var validateIDCard = (rule, value, callback)=> {
-	if (value && (!(/\d{17}[\d|x]|\d{15}/).test(value) || (value.length !== 15 && value.length !== 18))) {
-	  callback(new Error('身份证号码不规范'))
-	} else {
-	  callback()
-	}
-};
-
-var validateEmail = (rule, value, callback) => {
-	if (value === '') {
-	  callback(new Error('请输入邮箱'));
-	} else {
-	  if (value !== '') { 
-	    var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-	    if(!reg.test(value)){
-	      callback(new Error('请输入有效的邮箱'));
-	    }
-	  }
-	  callback();
-	}
-};
-
-var validateAccount = (rule, value, callback) => {
-	if (value === '') {
-	    callback(new Error('请输入账户号'));
-	} else {
-	  if (value !== '') { 
-	    var reg=/^A\d{5}/;
-	    if(!reg.test(value)){
-	      callback(new Error('请正确填写账户号'));
-	    }
-	  }
-	  callback();
-	}
-};
-var validatePass = (rule, value, callback) => {
-  if (value === '') {
-    callback(new Error('请输入密码'));
-  } else {
-	  if (value !== '') { 
-	    var reg=/[\w,_]{6,20}/;
-	    if(!reg.test(value)){
-	      callback(new Error('请输入有效的密码'));
-	    }
-	  }
-    callback();
-  }
-};
+import  { Encrypt,Decrypt }   from  '@/aes'
+import {validateMobilePhone,validateIDCard,validateEmail,validatePass,validateSAccount} from '@/validate'
 
 export default {
   name:"SecuritiesAccountView",
@@ -331,10 +270,9 @@ export default {
           {required: true, validator: validateReOpen, trigger: 'blur' }
         ],
         account: [
-          {required: true,validator: validateAccount, trigger: 'blur' }
+          {required: true,validator: validateSAccount, trigger: 'blur' }
         ]
     },
-
     status:true
    };
   },
@@ -342,6 +280,10 @@ export default {
     open(formName){
       this.$refs[formName].validate(valid =>{
         if(valid){
+
+          this.openAccount.password=Encrypt(this.openAccount.password)
+          this.openAccount.confirm=Encrypt(this.openAccount.confirm)
+
           this.$http.post('/security/register',this.$qs.stringify(this.openAccount))
             .then(response => {
               if(response.data['answer']==='ok'){
@@ -362,44 +304,48 @@ export default {
       this.lossRegister.type = 1
       this.$refs[formName].validate(valid =>{
         if(valid){
-            this.$http.post('/security/lost',this.$qs.stringify(this.lossRegister))
-              .then(response => {
-                console.log(response.data)
-                if(response.data['answer']==='ok'){
-                  alert("挂失成功");
-                }else{
-                  alert(response.data['answer']);
-                }
-              })
+          this.lossRegister.password=Encrypt(this.lossRegister.password)
+          this.$http.post('/security/lost',this.$qs.stringify(this.lossRegister))
+            .then(response => {
+              console.log(response.data)
+              if(response.data['answer']==='ok'){
+                alert("挂失成功");
+              }else{
+                alert(response.data['answer']);
+              }
+            })
             .catch(function (error) {
               console.log(error);
             });
+          this.lossRegister.password=Decrypt(this.lossRegister.password)
         }else{
           alert("表单还未完成");
         }
       })
     },
-      reLoss(formName){
-        this.lossRegister.type = 0
-        this.$refs[formName].validate(valid =>{
-          if(valid){
-              this.$http.post('/security/lost',this.$qs.stringify(this.lossRegister))
-                .then(response => {
-                  console.log(response.data)
-                  if(response.data['answer']==='ok'){
-                    alert("取消挂失成功");
-                  }else{
-                    alert(response.data['answer']);
-                  }
-                })
-              .catch(function (error) {
+    reLoss(formName){
+      this.lossRegister.type = 0
+      this.$refs[formName].validate(valid =>{
+        if(valid){
+          this.lossRegister.password=Encrypt(this.lossRegister.password)
+          this.$http.post('/security/lost',this.$qs.stringify(this.lossRegister))
+            .then(response => {
+              console.log(response.data)
+              if(response.data['answer']==='ok'){
+                alert("取消挂失成功");
+              }else{
+                alert(response.data['answer']);
+              }
+            })
+            .catch(function (error) {
               console.log(error);
             });
-          }else{
-            alert("表单还未完成");
-          }
-        })
-      },
+          this.lossRegister.password=Decrypt(this.lossRegister.password)
+        }else{
+          alert("表单还未完成");
+        }
+      })
+    },
       pre_reopen(formName){
         this.$refs[formName].validate(valid =>{
           if(valid){

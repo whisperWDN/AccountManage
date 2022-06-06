@@ -3,7 +3,7 @@
     <el-tab-pane label="开户" name="first">
       <el-form ref="openAccountForm" :model="openAccount" label-width="200px" :rules="rules">
 
-        <el-form-item label="证券账户号">
+        <el-form-item label="证券账户号" prop="account">
           <el-input v-model="openAccount.account"></el-input>
         </el-form-item>
 
@@ -11,8 +11,8 @@
           <el-input type="password" v-model="openAccount.password" autocomplete="off"></el-input>
         </el-form-item>      
 
-        <el-form-item label="身份证号">
-          <el-input v-model="openAccount.license"></el-input>
+        <el-form-item label="身份证号" prop="license">
+          <el-input v-model="openAccount.license" ></el-input>
         </el-form-item>
 
         <el-form-item label="资金账户登录密码">
@@ -177,55 +177,7 @@
 </template>
 
 <script>
-var validateMobilePhone = (rule, value, callback) => {
-	if (value === '') {
-	  callback(new Error('手机号不可为空'));
-	} else {
-	  if (value !== '') { 
-	    var reg=/^1[3456789]\d{9}$/;
-	    if(!reg.test(value)){
-	      callback(new Error('请输入有效的手机号码'));
-	    }
-	  }
-	  callback();
-	}
-};
-
-var validateIDCard = (rule, value, callback)=> {
-	if (value && (!(/\d{17}[\d|x]|\d{15}/).test(value) || (value.length !== 15 && value.length !== 18))) {
-	  callback(new Error('身份证号码不规范'))
-	} else {
-	  callback()
-	}
-};
-
-var validateEmail = (rule, value, callback) => {
-	if (value === '') {
-	  callback(new Error('请输入邮箱'));
-	} else {
-	  if (value !== '') { 
-	    var reg=/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
-	    if(!reg.test(value)){
-	      callback(new Error('请输入有效的邮箱'));
-	    }
-	  }
-	  callback();
-	}
-};
-
-var validateAccountAsset = (rule, value, callback) => {
-	if (value === '') {
-	  callback(new Error('请输入账户号'));
-	} else {
-	  if (value !== '') { 
-	    var reg=/^C\d{5}/;
-	    if(!reg.test(value)){
-	      callback(new Error('请正确填写账户号'));
-	    }
-	  }
-	  callback();
-	}
-};
+import {validateMobilePhone,validateIDCard,validateEmail,validatePass,validateAAccount} from '@/validate'
 
 var validateAccount = (rule, value, callback) => {
 	if (value === '') {
@@ -241,19 +193,7 @@ var validateAccount = (rule, value, callback) => {
 	}
 };
 
-var validatePass = (rule, value, callback) => {
-  if (value === '') {
-    callback(new Error('请输入密码'));
-  } else {
-	  if (value !== '') { 
-	    var reg=/[\w,_]{6,20}/;
-	    if(!reg.test(value)){
-	      callback(new Error('请输入有效的密码'));
-	    }
-	  }else
-    callback();
-  }
-};
+
 
   export default {
     name:"AssetAccountView",
@@ -400,10 +340,10 @@ var validatePass = (rule, value, callback) => {
             { validator: validatePass6, trigger: 'blur' }
           ],
           account: [
-            { validator: validateAccount, trigger: 'blur' }
+            {required: true, validator: validateAccount, trigger: 'blur' }
           ],
           assetAccount:[
-            {required: true, validator: validateAccountAsset, trigger: 'blur' }
+            {required: true, validator: validateAAccount, trigger: 'blur' }
           ]
         },
 
@@ -479,7 +419,6 @@ var validatePass = (rule, value, callback) => {
                   this.status = false
                   this.reOpenAccount.account = response.data['infor']['account']
                   this.reOpenAccount.license = response.data['infor']['license']
-
                 }else{
                   alert(response.data['answer']);
                 }
