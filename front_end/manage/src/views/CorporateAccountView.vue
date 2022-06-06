@@ -74,7 +74,7 @@
           <el-input v-model="lossRegister.account" ></el-input>
         </el-form-item>  
         <el-form-item label="密码" prop="password">
-          <el-input v-model="lossRegister.password" ></el-input>
+          <el-input v-model="lossRegister.password" type="password"></el-input>
         </el-form-item>  
         <el-form-item label="身份证号" prop="license">
           <el-input v-model="lossRegister.license" ></el-input>
@@ -173,7 +173,7 @@
           <el-input v-model="closeAccount.account"></el-input>
         </el-form-item>  
         <el-form-item label="密码" prop="password">
-          <el-input v-model="closeAccount.password"></el-input>
+          <el-input v-model="closeAccount.password" type="password"></el-input>
         </el-form-item>  
         <el-form-item label="身份证号" prop="license">
           <el-input v-model="closeAccount.license"></el-input>
@@ -364,7 +364,11 @@ var validatePass = (rule, value, callback) => {
           if(valid){
             this.$http.post('/security/co_register',this.$qs.stringify(this.openAccount))
               .then(response => {
-                alert(response.data);
+                if(response.data['answer']==='ok'){
+                  alert("开户成功");
+                }else{
+                  alert(response.data['answer']);
+                }
               })
               .catch(function (error) {
                 console.log(error);
@@ -379,7 +383,11 @@ var validatePass = (rule, value, callback) => {
           if(valid){
               this.$http.post('/security/co_lost',this.$qs.stringify(this.lossRegister))
                 .then(response => {
-                  console.log(response.data);
+                  if(response.data['answer']==='ok'){
+                    alert("挂失成功");
+                  }else{
+                    alert(response.data['answer']);
+                  }
                 })
               .catch(function (error) {
               console.log(error);
@@ -394,8 +402,19 @@ var validatePass = (rule, value, callback) => {
           if(valid){
             this.$http.post('/security/co_re_register',this.$qs.stringify(this.reOpen))
               .then(response => {
-                console.log(response.data);
-                this.status = true
+                if(response.data['answer']==='ok'){
+                  this.status = false
+                  this.reOpenAccount.name = response.data['infor']['name']
+                  this.reOpenAccount.gender = response.data['infor']['gender']
+                  this.reOpenAccount.license = response.data['infor']['license']
+                  this.reOpenAccount.phone = response.data['infor']['phone']
+                  this.reOpenAccount.email = response.data['infor']['email']
+                  this.reOpenAccount.business_license = response.data['infor']['business_license']
+                  this.reOpenAccount.registration = response.data['infor']['registration']
+
+                }else{
+                  alert(response.data['answer']);
+                }
               })
               .catch(function (error) {
                 console.log(error);
@@ -410,7 +429,11 @@ var validatePass = (rule, value, callback) => {
           if(valid){
             this.$http.post('/security/co_re_register2',this.$qs.stringify(this.reOpenAccount))
               .then(response => {
-                console.log(response.data);
+                if(response.data['answer']==='ok'){
+                  alert("开户成功");
+                }else{
+                  alert(response.data['answer']);
+                }
               })
               .catch(function (error) {
                 console.log(error);
@@ -420,12 +443,16 @@ var validatePass = (rule, value, callback) => {
           }
         })
       },
-      close(){
+      close(formName){
         this.$refs[formName].validate(valid =>{
           if(valid){
             this.$http.post('/security/co_delete',this.$qs.stringify(this.closeAccount))
               .then(response => {
-                console.log(response.data);
+                  if(response.data['answer']==='ok'){
+                    alert("销户成功");
+                  }else{
+                    alert(response.data['answer']);
+                  }
                 })
               .catch(function (error) {
                 console.log(error);

@@ -405,7 +405,11 @@ var validatePass = (rule, value, callback) => {
           if(valid){
             this.$http.post('/fund/register',this.$qs.stringify(this.openAccount))
               .then(response => {
-                alert(response.data);
+                if(response.data['answer']==='ok'){
+                  alert("开户成功");
+                }else{
+                  alert(response.data['answer']);
+                }
               })
               .catch(function (error) {
                 console.log(error);
@@ -420,7 +424,11 @@ var validatePass = (rule, value, callback) => {
           if(valid){
               this.$http.post('/fund/lost',this.$qs.stringify(this.lossRegister))
                 .then(response => {
-                  console.log(response.data);
+                  if(response.data['answer']==='ok'){
+                    alert("挂失成功");
+                  }else{
+                    alert(response.data['answer']);
+                  }
                 })
               .catch(function (error) {
               console.log(error);
@@ -435,8 +443,11 @@ var validatePass = (rule, value, callback) => {
           if(valid){
             this.$http.post('/fund/re_register',this.$qs.stringify(this.reOpen))
               .then(response => {
-                console.log(response.data);
-                this.status = false
+                if(response.data['answer']==='ok'){
+                  this.status = false
+                }else{
+                  alert(response.data['answer']);
+                }
               })
               .catch(function (error) {
                 console.log(error);
@@ -451,7 +462,11 @@ var validatePass = (rule, value, callback) => {
           if(valid){
             this.$http.post('/fund/re_register2',this.$qs.stringify(this.reOpenAccount))
               .then(response => {
-                console.log(response.data);
+                if(response.data['answer']==='ok'){
+                  alert("开户成功");
+                }else{
+                  alert(response.data['answer']);
+                }
               })
               .catch(function (error) {
                 console.log(error);
@@ -466,8 +481,12 @@ var validatePass = (rule, value, callback) => {
           if(valid){
             this.$http.post('/fund/delete',this.$qs.stringify(this.closeAccount))
               .then(response => {
-                console.log(response.data);
-                })
+                if(response.data['answer']==='ok'){
+                  alert("销户成功");
+                }else{
+                  alert(response.data['answer']);
+                }
+              })
               .catch(function (error) {
                 console.log(error);
               }); 
@@ -480,10 +499,14 @@ var validatePass = (rule, value, callback) => {
       mdf(formName){
         this.$refs[formName].validate(valid =>{
           if(valid){
-            this.$http.post('/fund/modify',this.$qs.stringify(this.closeAccount))
+            this.$http.post('/fund/modify',this.$qs.stringify(this.modify))
               .then(response => {
-                console.log(response.data);
-                })
+                if(response.data['answer']==='ok'){
+                  alert("修改成功");
+                }else{
+                  alert(response.data['answer']);
+                }
+              })
               .catch(function (error) {
                 console.log(error);
               }); 
@@ -495,10 +518,14 @@ var validatePass = (rule, value, callback) => {
       deposit(formName){
         this.$refs[formName].validate(valid =>{
           if(valid){
-            this.$http.post('/fund/deposit',this.$qs.stringify(this.closeAccount))
+            this.$http.post('/fund/deposit',this.$qs.stringify(this.DepositWithdrawal))
               .then(response => {
-                console.log(response.data);
-                })
+                if(response.data['answer']==='ok'){
+                  alert("操作成功");
+                }else{
+                  alert(response.data['answer']);
+                }
+              })
               .catch(function (error) {
                 console.log(error);
               }); 

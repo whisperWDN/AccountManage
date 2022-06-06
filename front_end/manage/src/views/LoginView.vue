@@ -165,7 +165,7 @@ var validateMobilePhone = (rule, value, callback) => {
     },
     methods: {
       login(){
-        this.$http.post('/login',this.$qs.stringify(this.openAccount))
+        this.$http.post('/login',this.$qs.stringify(this.Login))
           .then(response => {
             if(response.data['answer']==='ok'){
               this.$store.commit('changeLogState',true)
@@ -181,9 +181,10 @@ var validateMobilePhone = (rule, value, callback) => {
      register(formName){
         this.$refs[formName].validate(valid =>{
           if(valid){
-            this.$http.post('/register',this.$qs.stringify(this.openAccount))
+            this.$http.post('/register',this.$qs.stringify(this.Register))
               .then(response => {
                 if(response.data['answer']==='ok'){
+                  alert("注册成功");
                   this.activeName = "first"
                 }else{
                   alert(response.data['answer']);
