@@ -169,7 +169,7 @@ var validateMobilePhone = (rule, value, callback) => {
           .then(response => {
             if(response.data['answer']==='ok'){
               this.$store.commit('changeLogState',true)
-              this.$store.commit('setAdministrator','whisper')
+              this.$store.commit('setAdministrator',this.Login.username)
             }else{
               alert(response.data['answer']);
             }

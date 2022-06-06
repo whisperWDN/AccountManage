@@ -1,36 +1,35 @@
 <template>
   <el-tabs v-model="activeName" @tab-click="handleClick">
-    <el-tab-pane label="开户" name="first" >
+    <el-tab-pane label="开户" name="first">
       <el-form ref="openAccountForm" :model="openAccount" label-width="200px" :rules="rules">
 
-        <el-form-item label="证券账户号" prop="account">
+        <el-form-item label="证券账户号">
           <el-input v-model="openAccount.account"></el-input>
         </el-form-item>
 
-        <el-form-item label="密码" prop="password">
+        <el-form-item label="密码">
           <el-input type="password" v-model="openAccount.password" autocomplete="off"></el-input>
         </el-form-item>      
 
-        <el-form-item label="身份证号" prop="license">
+        <el-form-item label="身份证号">
           <el-input v-model="openAccount.license"></el-input>
         </el-form-item>
 
-        <el-form-item label="资金账户登录密码"  prop="password">
+        <el-form-item label="资金账户登录密码">
           <el-input type="password" v-model="openAccount.loginPassword" autocomplete="off"></el-input>
         </el-form-item>
 
-        <el-form-item label="重复密码"  prop="confirm">
+        <el-form-item label="重复密码"  >
           <el-input type="password" v-model="openAccount.confirm" autocomplete="off"></el-input>
         </el-form-item>
 
-        <el-form-item label="资金账户交易密码"  prop="password">
+        <el-form-item label="资金账户交易密码" >
           <el-input type="password" v-model="openAccount.tradePassword" autocomplete="off"></el-input>
         </el-form-item>
 
         <el-form-item label="重复密码">
           <el-input type="password" v-model="openAccount.confirm2" autocomplete="off"></el-input>
         </el-form-item>
-
         <el-form-item>
           <el-button type="primary" @click="open('openAccountForm')">开户</el-button>
         </el-form-item>
@@ -38,29 +37,34 @@
     </el-tab-pane>
     <el-tab-pane label="挂失" name="second">
       <el-form ref="lossRegisterForm" :model="lossRegister" label-width="80px" :rules="rules">
-        <el-form-item label="账户号" prop="assetAccount">
+        <el-form-item label="账户号">
           <el-input v-model="lossRegister.account" ></el-input>
         </el-form-item>  
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="lossRegister.password" ></el-input>
+        <el-form-item label="登录密码">
+          <el-input v-model="lossRegister.password" type="password"></el-input>
         </el-form-item>  
-        <el-form-item label="身份证号" prop="license">
+        <el-form-item label="身份证号">
           <el-input v-model="lossRegister.license" ></el-input>
         </el-form-item>  
+        <el-row> 
         <el-form-item>
           <el-button type="primary" @click="loss('lossRegisterForm')">挂失</el-button>
         </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="reLoss('lossRegisterForm')">取消挂失</el-button>
+        </el-form-item>
+        </el-row>
       </el-form>
     </el-tab-pane>
     <el-tab-pane label="重新开户" name="third">
       <el-form ref="reOpenForm" :model="reOpen" label-width="80px" :rules="rules" v-if="status">
-        <el-form-item label="账户号" prop="assetAccount">
+        <el-form-item label="账户号">
           <el-input v-model="reOpen.account" ></el-input>
         </el-form-item>  
-        <el-form-item label="密码" prop="password">
+        <el-form-item label="登录密码">
           <el-input v-model="reOpen.password" type="password"></el-input>
         </el-form-item>  
-        <el-form-item label="身份证号" prop="license">
+        <el-form-item label="身份证号">
           <el-input v-model="reOpen.license" ></el-input>
         </el-form-item>  
         <el-form-item>
@@ -70,27 +74,27 @@
 
       <el-form ref="reOpenAccountForm" :model="reOpenAccount" label-width="200px" :rules="rules" v-else>
 
-        <el-form-item label="证券账户号" prop="account">
+        <el-form-item label="证券账户号">
           <el-input v-model="reOpenAccount.account"></el-input>
         </el-form-item>
 
-        <el-form-item label="密码" prop="password">
+        <el-form-item label="密码">
           <el-input type="password" v-model="reOpenAccount.password" autocomplete="off"></el-input>
         </el-form-item>      
 
-        <el-form-item label="身份证号" prop="license">
-          <el-input v-model="reOpenAccount.license"></el-input>
+        <el-form-item label="身份证号" >
+          <el-input v-model="reOpenAccount.license" ></el-input>
         </el-form-item>
 
-        <el-form-item label="资金账户登录密码"  prop="password">
+        <el-form-item label="资金账户登录密码">
           <el-input type="password" v-model="reOpenAccount.loginPassword" autocomplete="off"></el-input>
         </el-form-item>
 
-        <el-form-item label="重复密码"  prop="confirm2">
+        <el-form-item label="重复密码" >
           <el-input type="password" v-model="reOpenAccount.confirm" autocomplete="off"></el-input>
         </el-form-item>
 
-        <el-form-item label="资金账户交易密码"  prop="password">
+        <el-form-item label="资金账户交易密码">
           <el-input type="password" v-model="reOpenAccount.tradePassword" autocomplete="off"></el-input>
         </el-form-item>
 
@@ -99,19 +103,19 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button type="primary" @click="reOpen('reOpenAccountForm')">重新开户</el-button>
+          <el-button type="primary" @click="reopen('reOpenAccountForm')">重新开户</el-button>
         </el-form-item>
       </el-form>
     </el-tab-pane>
     <el-tab-pane label="销户" name="fourth">
       <el-form ref="closeAccountForm" :model="closeAccount" label-width="80px" :rules="rules">
-        <el-form-item label="账户号" prop="assetAccount">
+        <el-form-item label="账户号">
           <el-input v-model="closeAccount.account" ></el-input>
         </el-form-item>  
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="closeAccount.password" ></el-input>
+        <el-form-item label="登录密码">
+          <el-input v-model="closeAccount.password" type="password"></el-input>
         </el-form-item>  
-        <el-form-item label="身份证号" prop="license">
+        <el-form-item label="身份证号">
           <el-input v-model="closeAccount.license" ></el-input>
         </el-form-item>  
         <el-form-item>
@@ -121,23 +125,23 @@
     </el-tab-pane> 
     <el-tab-pane label="修改" name="fifth">
       <el-form ref="modifyForm" :model="modify" label-width="80px" :rules="rules">
-        <el-form-item label="账户号" prop="assetAccount">
+        <el-form-item label="账户号">
             <el-input v-model="modify.account" ></el-input>
         </el-form-item>  
         <el-form-item label="密码类型">
             <el-radio-group v-model="modify.type">
-            <el-radio label="登陆密码"></el-radio>
+            <el-radio label="登录密码"></el-radio>
             <el-radio label="交易密码"></el-radio>
             </el-radio-group>
         </el-form-item>
-        <el-form-item label="原有密码" prop="password">
-            <el-input v-model="modify.oldPassword" ></el-input>
+        <el-form-item label="原有密码">
+            <el-input v-model="modify.oldPassword" type="password"></el-input>
         </el-form-item>  
-        <el-form-item label="新密码" prop="password">
-            <el-input  v-model="modify.newPassword" ></el-input>
+        <el-form-item label="新密码">
+            <el-input  v-model="modify.newPassword" type="password"></el-input>
         </el-form-item>
-        <el-form-item label="重复密码" prop="confirm3">
-            <el-input  v-model="modify.confirm" ></el-input>
+        <el-form-item label="重复密码">
+            <el-input  v-model="modify.confirm" type="password"></el-input>
         </el-form-item>  
         <el-form-item>
             <el-button type="primary" @click="mdf('modifyForm')">确认修改</el-button>
@@ -146,14 +150,14 @@
     </el-tab-pane>
     <el-tab-pane label="存取款" name="sixth">
       <el-form ref="DepositWithdrawalForm" :model="DepositWithdrawal" label-width="80px" :rules="rules">
-        <el-form-item label="账户号" prop="assetAccount">
+        <el-form-item label="账户号" >
           <el-input v-model="DepositWithdrawal.account" ></el-input>
         </el-form-item>  
-        <el-form-item label="登录密码" prop="password">
-          <el-input v-model="DepositWithdrawal.loginPassword" ></el-input>
+        <el-form-item label="登录密码">
+          <el-input v-model="DepositWithdrawal.loginPassword" type="password"></el-input>
         </el-form-item>  
-        <el-form-item label="交易密码" prop="password">
-          <el-input v-model="DepositWithdrawal.DWPassword" ></el-input>
+        <el-form-item label="交易密码">
+          <el-input v-model="DepositWithdrawal.DWPassword" type="password"></el-input>
         </el-form-item> 
         <el-form-item label="操作类型" >
             <el-radio-group v-model="DepositWithdrawal.type">
@@ -250,6 +254,7 @@ var validatePass = (rule, value, callback) => {
     callback();
   }
 };
+
   export default {
     name:"AssetAccountView",
     data() {
@@ -316,7 +321,8 @@ var validatePass = (rule, value, callback) => {
         lossRegister:{
           license: '',
           account:'',
-          password:''
+          password:'',
+          type:''
         },
         closeAccount:{
           license: '',
@@ -359,19 +365,24 @@ var validatePass = (rule, value, callback) => {
             { required: true, message: '请选择性别', trigger: 'change' }
           ],
           license: [
-            { required: true, message: '请输入身份证号', trigger: 'blur' },
+            {required: true, message: '请输入身份证号', trigger: 'blur' },
 
-            { validator: validateIDCard, trigger: 'blur' }
+            {validator: validateIDCard, trigger: 'blur' }
           ],
           email: [
-            { validator: validateEmail, trigger: 'blur' }
+            {validator: validateEmail, trigger: 'blur' }
           ],
           phone: [
-            { validator: validateMobilePhone, trigger: 'blur' }
+            {validator: validateMobilePhone, trigger: 'blur' }
           ],
           password: [
-            { required: true, message: '请输入密码', trigger: 'blur' },
-            { validator: validatePass, trigger: 'blur' }
+            {required: true, validator: validatePass, trigger: 'blur' }
+          ],
+          tradePassword: [
+            {required: true, validator: validatePass, trigger: 'blur' }
+          ],
+          loginPassword: [
+            {required: true, validator: validatePass, trigger: 'blur' }
           ],
           confirm: [
             { validator: validatePass2, trigger: 'blur' }
@@ -392,7 +403,7 @@ var validatePass = (rule, value, callback) => {
             { validator: validateAccount, trigger: 'blur' }
           ],
           assetAccount:[
-            { validator: validateAccountAsset, trigger: 'blur' }
+            {required: true, validator: validateAccountAsset, trigger: 'blur' }
           ]
         },
 
@@ -420,12 +431,33 @@ var validatePass = (rule, value, callback) => {
         })
       },
       loss(formName){
+        this.lossRegister.type = 1
         this.$refs[formName].validate(valid =>{
           if(valid){
               this.$http.post('/fund/lost',this.$qs.stringify(this.lossRegister))
                 .then(response => {
                   if(response.data['answer']==='ok'){
                     alert("挂失成功");
+                  }else{
+                    alert(response.data['answer']);
+                  }
+                })
+              .catch(function (error) {
+              console.log(error);
+            });
+          }else{
+            alert("表单还未完成");
+          }
+        })
+      },
+      reLoss(formName){
+        this.lossRegister.type = 0
+        this.$refs[formName].validate(valid =>{
+          if(valid){
+              this.$http.post('/fund/lost',this.$qs.stringify(this.lossRegister))
+                .then(response => {
+                  if(response.data['answer']==='ok'){
+                    alert("取消挂失成功");
                   }else{
                     alert(response.data['answer']);
                   }
@@ -445,6 +477,9 @@ var validatePass = (rule, value, callback) => {
               .then(response => {
                 if(response.data['answer']==='ok'){
                   this.status = false
+                  this.reOpenAccount.account = response.data['infor']['account']
+                  this.reOpenAccount.license = response.data['infor']['license']
+
                 }else{
                   alert(response.data['answer']);
                 }

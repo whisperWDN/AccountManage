@@ -35,12 +35,11 @@
             <el-input v-model="openAccount.phone"></el-input>
           </el-form-item>
         </el-row>
-
         <el-row>
           <el-form-item label="授权人姓名">
             <el-input v-model="openAccount.authorizer_name"></el-input>
           </el-form-item>
-          <el-form-item label="授权人身份证号" prop="license">
+          <el-form-item label="授权人身份证号" prop="aulicense">
             <el-input v-model="openAccount.authorizer_license"></el-input>
           </el-form-item>
         </el-row>
@@ -48,7 +47,7 @@
           <el-input v-model="openAccount.authorizer_address" style="width: 600px"></el-input>
         </el-form-item>
         <el-row>
-          <el-form-item label="授权人联系电话" prop="phone">
+          <el-form-item label="授权人联系电话" prop="auphone">
             <el-input v-model="openAccount.authorizer_phone"></el-input>
           </el-form-item>
 
@@ -79,9 +78,15 @@
         <el-form-item label="身份证号" prop="license">
           <el-input v-model="lossRegister.license" ></el-input>
         </el-form-item>  
+        <el-row>
         <el-form-item>
           <el-button type="primary" @click="loss('lossRegisterForm')">挂失</el-button>
         </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="reLoss('lossRegisterForm')">取消挂失</el-button>
+        </el-form-item>
+        </el-row>
+
       </el-form>
     </el-tab-pane>
     <el-tab-pane label="重新开户" name="third">
@@ -126,20 +131,20 @@
           <el-input v-model="reOpenAccount.address" style="width: 600px"></el-input>
         </el-form-item>
         <el-row>
-          <el-form-item label="法人身份证号" prop="license">
-            <el-input v-model="reOpenAccount.license"></el-input>
+          <el-form-item label="法人身份证号" prop="aulicense">
+            <el-input v-model="reOpenAccount.license" readonly=true></el-input>
           </el-form-item>
-          <el-form-item label="法人联系电话" prop="phone">
+          <el-form-item label="法人联系电话" prop="auphone">
             <el-input v-model="reOpenAccount.phone"></el-input>
           </el-form-item>
         </el-row>
 
         <el-row>
-          <el-form-item label="授权人姓名" prop="name">
+          <!-- <el-form-item label="授权人姓名" prop="name">
             <el-input v-model="reOpenAccount.authorizer_name"></el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="授权人身份证号" prop="license">
-            <el-input v-model="reOpenAccount.authorizer_license"></el-input>
+            <el-input v-model="reOpenAccount.authorizer_license" readonly=true></el-input>
           </el-form-item>
         </el-row>
         <el-form-item label="授权人家庭住址" >
@@ -158,7 +163,7 @@
         <el-form-item label="密码" prop="password">
           <el-input v-model="reOpenAccount.password" type="password"></el-input>
         </el-form-item>        
-        <el-form-item label="确认密码" prop="confirm2">
+        <el-form-item label="确认密码">
           <el-input v-model="reOpenAccount.confirm" type="password"></el-input>
         </el-form-item>
         <el-form-item>
@@ -293,7 +298,8 @@ var validatePass = (rule, value, callback) => {
         lossRegister:{
           license: '',
           account:'',
-          password:''
+          password:'',
+          type:''
         },
         closeAccount:{
           license: '',
@@ -379,12 +385,34 @@ var validatePass = (rule, value, callback) => {
         })
       },
       loss(formName){
+        this.lossRegister.type = 1
         this.$refs[formName].validate(valid =>{
           if(valid){
               this.$http.post('/security/co_lost',this.$qs.stringify(this.lossRegister))
                 .then(response => {
                   if(response.data['answer']==='ok'){
                     alert("挂失成功");
+                  }else{
+                    alert(response.data['answer']);
+                  }
+                })
+              .catch(function (error) {
+              console.log(error);
+            });
+          }else{
+            alert("表单还未完成");
+          }
+        })
+      },
+      reLoss(formName){
+        this.lossRegister.type = 0
+        this.$refs[formName].validate(valid =>{
+          if(valid){
+              this.$http.post('/security/co_lost',this.$qs.stringify(this.lossRegister))
+                .then(response => {
+                  console.log(response.data)
+                  if(response.data['answer']==='ok'){
+                    alert("取消挂失成功");
                   }else{
                     alert(response.data['answer']);
                   }
@@ -411,7 +439,9 @@ var validatePass = (rule, value, callback) => {
                   this.reOpenAccount.email = response.data['infor']['email']
                   this.reOpenAccount.business_license = response.data['infor']['business_license']
                   this.reOpenAccount.registration = response.data['infor']['registration']
-
+                  this.reOpenAccount.authorizer_license = response.data['infor']['authorizer_license']
+                  this.reOpenAccount.authorizer_address = response.data['infor']['authorizer_address']
+                  this.reOpenAccount.authorizer_phone = response.data['infor']['authorizer_phone']
                 }else{
                   alert(response.data['answer']);
                 }

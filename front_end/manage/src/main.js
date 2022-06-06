@@ -10,7 +10,7 @@ import 'element-plus/dist/index.css'
 const app = createApp(App)
 app.use(store).use(router).use(ElementPlus)
 
-axios.defaults.baseURL = 'http://10.186.92.158:4399/administrator'
+axios.defaults.baseURL = 'http://10.186.119.202:4399/administrator'
 // axios.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8';
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';

@@ -68,10 +68,15 @@
         </el-form-item>  
         <el-form-item label="身份证号" prop="license">
           <el-input v-model="lossRegister.license" ></el-input>
-        </el-form-item>  
+        </el-form-item>
+        <el-row> 
         <el-form-item>
           <el-button type="primary" @click="loss('lossRegisterForm')">挂失</el-button>
         </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="reLoss('lossRegisterForm')">取消挂失</el-button>
+        </el-form-item>
+        </el-row>
       </el-form>
     </el-tab-pane>
     <el-tab-pane label="重新开户" name="third">
@@ -104,7 +109,7 @@
         </el-row>
 
         <el-form-item label="身份证号" prop="license">
-          <el-input v-model="reOpenAccount.license" ></el-input>
+          <el-input v-model="reOpenAccount.license" readonly=true></el-input>
         </el-form-item>
         <el-form-item label="家庭住址">
           <el-input v-model="reOpenAccount.address"></el-input>
@@ -137,7 +142,7 @@
         <el-form-item label="密码" prop="password">
           <el-input v-model="reOpenAccount.password" type="password"></el-input>
         </el-form-item>        
-        <el-form-item label="确认密码" prop="confirm2">
+        <el-form-item label="确认密码" prop="reOpenConfirm">
           <el-input v-model="reOpenAccount.confirm" type="password"></el-input>
         </el-form-item>
         <el-form-item>
@@ -233,126 +238,156 @@ export default {
   name:"SecuritiesAccountView",
   data() {
     var validatePass2 = (rule, value, callback) => {
-    if (value === '') {
-      callback(new Error('请再次输入密码'));
-    } else if (value !== this.openAccount.password) {
-      callback(new Error('两次输入密码不一致!'));
-    } else {
-      callback();
-    }
-  };
-  var validatePass3 = (rule, value, callback) => {
-    if (value === '') {
-      callback(new Error('请再次输入密码'));
-    } else if (value !== this.reOpenAccount.password) {
-      callback(new Error('两次输入密码不一致!'));
-    } else {
-      callback();
-    }
-  };
-  return {
-    activeName: 'second',
-    openAccount: {
-      name: '',
-      gender: '',
-      license: '',
-      address: '',
-      profession: '',
-      education:'',
-      company:'',
-      password:'',
-      confirm:'',
-      phone:'',
-      email:''
+      if (value === '') {
+        callback(new Error('请再次输入密码'));
+      } else if (value !== this.openAccount.password) {
+        callback(new Error('两次输入密码不一致!'));
+      } else {
+        callback();
+      }
+    };
+    var validateReOpen = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'));
+      } else if (value !== this.reOpenAccount.password) {
+        callback(new Error('两次输入密码不一致!'));
+      } else {
+        callback();
+      }
+    };
+    return {
+      activeName: 'second',
+      openAccount: {
+        name: '',
+        gender: '',
+        license: '',
+        address: '',
+        profession: '',
+        education:'',
+        company:'',
+        password:'',
+        confirm:'',
+        phone:'',
+        email:''
+      },
+      lossRegister:{
+        license: '',
+        account:'',
+        password:'',
+        type:''
+      },
+      closeAccount:{
+        license: '',
+        account:'',
+        password:''
+      },
+      reOpen:{
+        license: '',
+        account:'',
+        password:''
+      },
+      reOpenAccount: {
+        name: '',
+        gender: '',
+        license: '',
+        address: '',
+        profession: '',
+        education:'',
+        company:'',
+        password:'',
+        confirm:'',
+        phone:'',
+        email:''
+      },
+      rules: {
+        name: [
+          { required: true, message: '请输入姓名', trigger: 'blur' },
+        ],
+        gender: [
+          { required: true, message: '请选择性别', trigger: 'change' }
+        ],
+        license: [
+          {required: true,validator: validateIDCard, trigger: 'blur' }
+        ],
+        Aulicense: [
+          {required: true,validator: validateIDCard, trigger: 'blur' }
+        ],
+        email: [
+          {required: true,validator: validateEmail, trigger: 'blur' }
+        ],
+        phone: [
+          {required: true,validator: validateMobilePhone, trigger: 'blur' }
+        ],
+        Auphone: [
+          {required: true,validator: validateMobilePhone, trigger: 'blur' }
+        ],
+        password: [
+          {required: true, validator: validatePass, trigger: 'blur' }
+        ],
+        confirm: [
+          {required: true, validator: validatePass2, trigger: 'blur' }
+        ],
+        reOpenConfirm: [
+          {required: true, validator: validateReOpen, trigger: 'blur' }
+        ],
+        account: [
+          {required: true,validator: validateAccount, trigger: 'blur' }
+        ]
     },
-    lossRegister:{
-      license: '',
-      account:'',
-      password:''
-    },
-    closeAccount:{
-      license: '',
-      account:'',
-      password:''
-    },
-    reOpen:{
-      license: '',
-      account:'',
-      password:''
-    },
-    reOpenAccount: {
-      name: '',
-      gender: '',
-      license: '',
-      address: '',
-      profession: '',
-      education:'',
-      company:'',
-      password:'',
-      confirm:'',
-      phone:'',
-      email:''
-    },
-        rules: {
-          name: [
-            { required: true, message: '请输入姓名', trigger: 'blur' },
-          ],
-          gender: [
-            { required: true, message: '请选择性别', trigger: 'change' }
-          ],
-          license: [
-            {required: true,validator: validateIDCard, trigger: 'blur' }
-          ],
-          email: [
-            {required: true,validator: validateEmail, trigger: 'blur' }
-          ],
-          phone: [
-            {required: true,validator: validateMobilePhone, trigger: 'blur' }
-          ],
-          password: [
-            {required: true, validator: validatePass, trigger: 'blur' }
-          ],
-          confirm: [
-            { validator: validatePass2, trigger: 'blur' }
-          ],
-          confirm2: [
-            { validator: validatePass3, trigger: 'blur' }
-          ],
-          account: [
-            {required: true,validator: validateAccount, trigger: 'blur' }
-          ]
-        },
 
-        status:true
-      };
+    status:true
+   };
+  },
+  methods: {
+    open(formName){
+      this.$refs[formName].validate(valid =>{
+        if(valid){
+          this.$http.post('/security/register',this.$qs.stringify(this.openAccount))
+            .then(response => {
+              if(response.data['answer']==='ok'){
+                alert("开户成功");
+              }else{
+                alert(response.data['answer']);
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        }else{
+          alert("表单还未完成");
+        }
+      })
     },
-    methods: {
-      open(formName){
-        this.$refs[formName].validate(valid =>{
-          if(valid){
-            this.$http.post('/security/register',this.$qs.stringify(this.openAccount))
+    loss(formName){
+      this.lossRegister.type = 1
+      this.$refs[formName].validate(valid =>{
+        if(valid){
+            this.$http.post('/security/lost',this.$qs.stringify(this.lossRegister))
               .then(response => {
+                console.log(response.data)
                 if(response.data['answer']==='ok'){
-                  alert("开户成功");
+                  alert("挂失成功");
                 }else{
                   alert(response.data['answer']);
                 }
               })
-              .catch(function (error) {
-                console.log(error);
-              });
-          }else{
-            alert("表单还未完成");
-          }
-        })
-      },
-      loss(formName){
+            .catch(function (error) {
+              console.log(error);
+            });
+        }else{
+          alert("表单还未完成");
+        }
+      })
+    },
+      reLoss(formName){
+        this.lossRegister.type = 0
         this.$refs[formName].validate(valid =>{
           if(valid){
               this.$http.post('/security/lost',this.$qs.stringify(this.lossRegister))
                 .then(response => {
+                  console.log(response.data)
                   if(response.data['answer']==='ok'){
-                    alert("挂失成功");
+                    alert("取消挂失成功");
                   }else{
                     alert(response.data['answer']);
                   }
