@@ -65,6 +65,8 @@ export default {
       closeA(){
         this.$store.commit('changeLogState',false)
         this.$store.commit('setAdministrator','')
+        this.$cookies.set("administratorName",'', {expires: "7D"});
+        this.$cookies.set("LogState", false, {expires: "7D"});
       },
       hrefToSA(){
         this.$router.push({ path:'/SecuritiesAccount'})

@@ -119,6 +119,7 @@ export default {
   },
   methods: {
     login(formName){
+      // console.log(this.$cookies.get("administratorName") )
       this.$refs[formName].validate(valid =>{
         if(valid){
           this.Login.password=Encrypt(this.Login.password)
@@ -127,6 +128,8 @@ export default {
               if(response.data['answer']==='ok'){
                 this.$store.commit('changeLogState',true)
                 this.$store.commit('setAdministrator',this.Login.username)
+                this.$cookies.set("administratorName", this.Login.username, {expires: "7D"});
+                this.$cookies.set("LogState", true, {expires: "7D"});
               }else{
                 this.$message({
                   showClose: true,

@@ -6,11 +6,15 @@ import axios from 'axios'
 import qs from 'qs'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import VueCookies from 'vue-cookies';
+
 
 const app = createApp(App)
-app.use(store).use(router).use(ElementPlus)
+app.use(store).use(router).use(ElementPlus).use(VueCookies)
 
+// axios.defaults.baseURL = 'http://10.186.2.215:4399/administrator'
 axios.defaults.baseURL = 'http://10.186.2.215:4399/administrator'
+
 // axios.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8';
 
 axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
