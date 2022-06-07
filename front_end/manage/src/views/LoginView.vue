@@ -128,7 +128,11 @@ export default {
                 this.$store.commit('changeLogState',true)
                 this.$store.commit('setAdministrator',this.Login.username)
               }else{
-                alert(response.data['answer']);
+                this.$message({
+                  showClose: true,
+                  message: response.data['answer'],
+                  type: 'error'
+                });
               }
             })
             .catch(function (error) {
@@ -136,7 +140,10 @@ export default {
             });
           this.Login.password=Decrypt(this.Login.password)
         }else{
-          alert("表单还未完成");
+          this.$message({
+            showClose: true,
+            message: "表单还未完成",
+          });
         }
       })
     },
@@ -147,10 +154,18 @@ export default {
           this.$http.post('/register',this.$qs.stringify(this.Register))
             .then(response => {
               if(response.data['answer']==='ok'){
-                alert("注册成功");
+                this.$message({
+                  showClose: true,
+                  message: "注册成功",
+                  type:'success'
+                });
                 this.activeName = "first"
               }else{
-                alert(response.data['answer']);
+                this.$message({
+                  showClose: true,
+                  message: response.data['answer'],
+                  type:'error'
+                });
               }
             })
             .catch(function (error) {
@@ -158,7 +173,10 @@ export default {
             });
           this.Register.password=Decrypt(this.Register.password)
         }else{
-          alert("表单还未完成");
+          this.$message({
+            showClose: true,
+            message: "表单还未完成",
+          });
         }
       })
      },
@@ -168,6 +186,6 @@ export default {
 
 <style scoped>
 .el-input{
-    width:200px
+  width:200px
 }
 </style>>

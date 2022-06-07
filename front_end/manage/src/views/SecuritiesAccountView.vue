@@ -13,7 +13,9 @@
             </el-radio-group>
           </el-form-item>
         </el-row>
-
+        <el-form-item label="股票账户" prop="stock_account">
+          <el-input v-model="openAccount.stock_account" ></el-input>
+        </el-form-item>
         <el-form-item label="身份证号" prop="license">
           <el-input v-model="openAccount.license"></el-input>
         </el-form-item>
@@ -107,7 +109,9 @@
             </el-radio-group>
           </el-form-item>
         </el-row>
-
+        <el-form-item label="股票账户" prop="stock_account">
+          <el-input v-model="openAccount.stock_account" ></el-input>
+        </el-form-item>
         <el-form-item label="身份证号" prop="license">
           <el-input v-model="reOpenAccount.license" readonly=true></el-input>
         </el-form-item>
@@ -142,8 +146,8 @@
         <el-form-item label="密码" prop="password">
           <el-input v-model="reOpenAccount.password" type="password"></el-input>
         </el-form-item>        
-        <el-form-item label="确认密码" prop="reOpenConfirm">
-          <el-input v-model="reOpenAccount.confirm" type="password"></el-input>
+        <el-form-item label="确认密码" prop="reopenconfirm">
+          <el-input v-model="reOpenAccount.reopenconfirm" type="password"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="reopen('reOpenAccountForm')">重新开户</el-button>
@@ -197,6 +201,7 @@ export default {
     return {
       activeName: 'second',
       openAccount: {
+        stock_account:'',
         name: '',
         gender: '',
         license: '',
@@ -226,6 +231,7 @@ export default {
         password:''
       },
       reOpenAccount: {
+        stock_account:'',
         name: '',
         gender: '',
         license: '',
@@ -234,7 +240,7 @@ export default {
         education:'',
         company:'',
         password:'',
-        confirm:'',
+        reopenconfirm:'',
         phone:'',
         email:''
       },
@@ -244,6 +250,9 @@ export default {
         ],
         gender: [
           { required: true, message: '请选择性别', trigger: 'change' }
+        ],
+        stock_account: [
+          { required: true, message: '请输入股票账户', trigger: 'blur' },
         ],
         license: [
           {required: true,validator: validateIDCard, trigger: 'blur' }
@@ -266,7 +275,7 @@ export default {
         confirm: [
           {required: true, validator: validatePass2, trigger: 'blur' }
         ],
-        reOpenConfirm: [
+        reopenconfirm: [
           {required: true, validator: validateReOpen, trigger: 'blur' }
         ],
         account: [
@@ -280,23 +289,35 @@ export default {
     open(formName){
       this.$refs[formName].validate(valid =>{
         if(valid){
-
           this.openAccount.password=Encrypt(this.openAccount.password)
           this.openAccount.confirm=Encrypt(this.openAccount.confirm)
-
           this.$http.post('/security/register',this.$qs.stringify(this.openAccount))
             .then(response => {
+              var message;
               if(response.data['answer']==='ok'){
-                alert("开户成功");
+                this.$message({
+                  showClose: true,
+                  message: "开户成功",
+                  type:'success'
+                });
               }else{
-                alert(response.data['answer']);
+                this.$message({
+                  showClose: true,
+                  message: response.data['answer'],
+                  type:'error'
+                });
               }
             })
             .catch(function (error) {
               console.log(error);
             });
+          this.openAccount.password=Decrypt(this.openAccount.password)
+          this.openAccount.confirm=Decrypt(this.openAccount.confirm)
         }else{
-          alert("表单还未完成");
+          this.$message({
+            showClose: true,
+            message: "表单还未完成",
+          });
         }
       })
     },
@@ -309,9 +330,17 @@ export default {
             .then(response => {
               console.log(response.data)
               if(response.data['answer']==='ok'){
-                alert("挂失成功");
+               this.$message({
+                  showClose: true,
+                  message: "挂失成功",
+                  type:'success'
+                });
               }else{
-                alert(response.data['answer']);
+                this.$message({
+                  showClose: true,
+                  message: response.data['answer'],
+                  type:'error'
+                });
               }
             })
             .catch(function (error) {
@@ -319,7 +348,10 @@ export default {
             });
           this.lossRegister.password=Decrypt(this.lossRegister.password)
         }else{
-          alert("表单还未完成");
+          this.$message({
+            showClose: true,
+            message: "表单还未完成",
+          });
         }
       })
     },
@@ -332,9 +364,17 @@ export default {
             .then(response => {
               console.log(response.data)
               if(response.data['answer']==='ok'){
-                alert("取消挂失成功");
+               this.$message({
+                  showClose: true,
+                  message: "取消挂失成功",
+                  type:'success'
+                });
               }else{
-                alert(response.data['answer']);
+                this.$message({
+                  showClose: true,
+                  message: response.data['answer'],
+                  type:'error'
+                });
               }
             })
             .catch(function (error) {
@@ -342,74 +382,114 @@ export default {
             });
           this.lossRegister.password=Decrypt(this.lossRegister.password)
         }else{
-          alert("表单还未完成");
+          this.$message({
+            showClose: true,
+            message: "表单还未完成",
+          });
         }
       })
     },
-      pre_reopen(formName){
-        this.$refs[formName].validate(valid =>{
-          if(valid){
-            this.$http.post('/security/re_register',this.$qs.stringify(this.reOpen))
-              .then(response => {
-                if(response.data['answer']==='ok'){
-                  this.status = false
-                  this.reOpenAccount.name = response.data['infor']['name']
-                  this.reOpenAccount.gender = response.data['infor']['gender']
-                  this.reOpenAccount.license = response.data['infor']['license']
-                  this.reOpenAccount.phone = response.data['infor']['phone']
-                  this.reOpenAccount.email = response.data['infor']['email']
-                }else{
-                  alert(response.data['answer']);
-                }
-              })
-              .catch(function (error) {
-                console.log(error);
+    pre_reopen(formName){
+      this.$refs[formName].validate(valid =>{
+        if(valid){
+          this.reOpen.password=Encrypt(this.reOpen.password)
+          this.$http.post('/security/re_register',this.$qs.stringify(this.reOpen))
+            .then(response => {
+              if(response.data['answer']==='ok'){
+                this.status = false
+                this.reOpenAccount.name = response.data['infor']['name']
+                this.reOpenAccount.gender = response.data['infor']['gender']
+                this.reOpenAccount.license = response.data['infor']['license']
+                this.reOpenAccount.phone = response.data['infor']['phone']
+                this.reOpenAccount.email = response.data['infor']['email']
+              }else{
+                this.$message({
+                  showClose: true,
+                  message: response.data['answer'],
+                  type:'error'
+                });
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
             });
-          }else{
-            alert("表单还未完成");
-          }
-        })
-      },
-      reopen(formName){
-        this.$refs[formName].validate(valid =>{
-          if(valid){
-            this.$http.post('/security/re_register2',this.$qs.stringify(this.reOpenAccount))
-              .then(response => {
+          this.reOpen.password=Decrypt(this.reOpen.password)
+        }else{
+          this.$message({
+            showClose: true,
+            message: "表单还未完成",
+          });
+        }
+      })
+    },
+    reopen(formName){
+      this.$refs[formName].validate(valid =>{
+        if(valid){
+          this.reOpenAccount.password=Encrypt(this.reOpenAccount.password)
+          this.reOpenAccount.reopenconfirm=Encrypt(this.reOpenAccount.reopenconfirm)
+          this.$http.post('/security/re_register2',this.$qs.stringify(this.reOpenAccount))
+            .then(response => {
+              if(response.data['answer']==='ok'){
+               this.$message({
+                  showClose: true,
+                  message: "开户成功",
+                  type:'success'
+                });
+              }else{
+                this.$message({
+                  showClose: true,
+                  message: response.data['answer'],
+                  type:'error'
+                });
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+          this.reOpenAccount.password=Decrypt(this.reOpenAccount.password)
+          this.reOpenAccount.reopenconfirm=Decrypt(this.reOpenAccount.reopenconfirm)
+        }else{
+          this.$message({
+            showClose: true,
+            message: "表单还未完成",
+          });
+        }
+      })
+    },
+    close(formName){
+      this.$refs[formName].validate(valid =>{
+        if(valid){
+          this.closeAccount.password=Encrypt(this.closeAccount.password)
+          this.$http.post('/security/delete',this.$qs.stringify(this.closeAccount))
+            .then(response => {
                 if(response.data['answer']==='ok'){
-                  alert("开户成功");
+                  this.$message({
+                    showClose: true,
+                    message: "销户成功",
+                    type:'success'
+                  });
                 }else{
-                  alert(response.data['answer']);
+                  this.$message({
+                    showClose: true,
+                    message: response.data['answer'],
+                    type:'error'
+                  });
                 }
               })
-              .catch(function (error) {
-                console.log(error);
-              });
-          }else{
-            alert("表单还未完成");
-          }
-        })
-      },
-      close(formName){
-        this.$refs[formName].validate(valid =>{
-          if(valid){
-            this.$http.post('/security/delete',this.$qs.stringify(this.closeAccount))
-              .then(response => {
-                  if(response.data['answer']==='ok'){
-                    alert("销户成功");
-                  }else{
-                    alert(response.data['answer']);
-                  }
-                })
-              .catch(function (error) {
-                console.log(error);
-              }); 
-          }else{
-            alert("表单还未完成");
-          }
-        })
-      }
+            .catch(function (error) {
+              console.log(error);
+            }); 
+          this.closeAccount.password=Decrypt(this.closeAccount.password)
+        }else{
+          this.$message({
+            showClose: true,
+            message: "表单还未完成",
+          });
+        }
+      })
     }
-  };
+  }
+};
 </script>
 
 <style scoped>

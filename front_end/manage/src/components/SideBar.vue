@@ -1,22 +1,22 @@
 <template>
-  <div>
+  <div class="side">
     <el-col>
       <el-menu
         default-active="2"
         class="el-menu-vertical-demo"
         @open="handleOpen"
         @close="handleClose"
-        background-color="#545c64"
-        text-color="#fff"
-        active-text-color="#ffd04b">
+        background-color="#fcaf56"
+        text-color="black"
+        active-text-color="purple">
         <el-menu-item index="1">
           <span style="width: 60px">工作人员</span>
           <div v-if="this.$store.state.logState">
             <span  style="margin-right: 10px;">{{this.$store.state.administrator}}</span>
-            <span @click="closeA" style="color: greenyellow">注销</span>
+            <span @click="closeA" style="color: blue">注销</span>
           </div>
           <div v-else>
-            <router-link to="/login" style="color: greenyellow">登录/注册</router-link>
+            <router-link to="/login" style="color: blue">登录/注册</router-link>
           </div>
         </el-menu-item>
         
@@ -92,4 +92,15 @@ export default {
 .el-menu{
   height: 700px;
 }
+.side{
+  margin-left: 20px;
+  margin-top: 1px;
+  border-radius: 4px
+
+}
+/* .side{
+  background-color:"#545c64";
+  text-color:"#fff";
+  active-text-color:"#ffd04b"
+} */
 </style>

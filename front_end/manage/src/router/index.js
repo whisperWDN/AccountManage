@@ -10,7 +10,6 @@ import LoginView from '../views/LoginView.vue'
 const routes = [
   {
     path:'',
-    //重定向
     redirect:'/login'
   },
   {
@@ -43,7 +42,12 @@ const routes = [
     path: '/CheckA',
     name: 'CheckA',
     component: CheckAView
-  }
+  },
+  // {
+  //   path: '/TopBar',
+  //   name: 'TopBar',
+  //   component: TopBar
+  // }
 ]
 
 const router = createRouter({

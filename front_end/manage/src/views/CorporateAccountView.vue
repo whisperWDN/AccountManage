@@ -6,10 +6,10 @@
         <el-form-item label="法人股票账户号码">
           <el-input v-model="openAccount.stock_account" ></el-input>
         </el-form-item>
-        <el-form-item label="法人注册登记号码">
+        <el-form-item label="法人注册登记号码" prop="registration">
           <el-input v-model="openAccount.registration"></el-input>
         </el-form-item>
-        <el-form-item label="营业执照号码">
+        <el-form-item label="营业执照号码" prop="business_license">
           <el-input v-model="openAccount.business_license"></el-input>
         </el-form-item>
         <el-row>
@@ -39,7 +39,7 @@
           <el-form-item label="授权人姓名">
             <el-input v-model="openAccount.authorizer_name"></el-input>
           </el-form-item>
-          <el-form-item label="授权人身份证号" prop="aulicense">
+          <el-form-item label="授权人身份证号" prop="authorizer_license">
             <el-input v-model="openAccount.authorizer_license"></el-input>
           </el-form-item>
         </el-row>
@@ -47,7 +47,7 @@
           <el-input v-model="openAccount.authorizer_address" style="width: 600px"></el-input>
         </el-form-item>
         <el-row>
-          <el-form-item label="授权人联系电话" prop="auphone">
+          <el-form-item label="授权人联系电话" prop="authorizer_phone">
             <el-input v-model="openAccount.authorizer_phone"></el-input>
           </el-form-item>
 
@@ -131,10 +131,10 @@
           <el-input v-model="reOpenAccount.address" style="width: 600px"></el-input>
         </el-form-item>
         <el-row>
-          <el-form-item label="法人身份证号" prop="aulicense">
+          <el-form-item label="法人身份证号" prop="license">
             <el-input v-model="reOpenAccount.license" readonly=true></el-input>
           </el-form-item>
-          <el-form-item label="法人联系电话" prop="auphone">
+          <el-form-item label="法人联系电话" prop="phone">
             <el-input v-model="reOpenAccount.phone"></el-input>
           </el-form-item>
         </el-row>
@@ -143,7 +143,7 @@
           <!-- <el-form-item label="授权人姓名" prop="name">
             <el-input v-model="reOpenAccount.authorizer_name"></el-input>
           </el-form-item> -->
-          <el-form-item label="授权人身份证号" prop="license">
+          <el-form-item label="授权人身份证号" prop="authorizer_license">
             <el-input v-model="reOpenAccount.authorizer_license" readonly=true></el-input>
           </el-form-item>
         </el-row>
@@ -151,7 +151,7 @@
           <el-input v-model="reOpenAccount.authorizer_address" style="width: 600px"></el-input>
         </el-form-item>
         <el-row>
-          <el-form-item label="授权人联系电话" prop="phone">
+          <el-form-item label="授权人联系电话" prop="authorizer_phone">
             <el-input v-model="reOpenAccount.authorizer_phone"></el-input>
           </el-form-item>
 
@@ -163,8 +163,8 @@
         <el-form-item label="密码" prop="password">
           <el-input v-model="reOpenAccount.password" type="password"></el-input>
         </el-form-item>        
-        <el-form-item label="确认密码">
-          <el-input v-model="reOpenAccount.confirm" type="password"></el-input>
+        <el-form-item label="确认密码" prop="reopenconfirm">
+          <el-input v-model="reOpenAccount.reopenconfirm" type="password"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="reopen('reOpenAccountForm')">重新开户</el-button>
@@ -192,251 +192,334 @@
 </template>
 
 <script>
-import {validateMobilePhone,validateIDCard,validateEmail,validatePass,validateCAccount} from '@/validate'
+import {validateMobilePhone,validateIDCard,validateEmail,validatePass,validateCAccount,validateRegistration,validateBusinessLicense} from '@/validate'
+import  { Encrypt,Decrypt }   from  '@/aes'
 
-
-
-
-  export default {
-    name:"CorporateAccountView",
-    data() {
-
-      var validatePass2 = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请再次输入密码'));
-        } else if (value !== this.openAccount.password) {
-          callback(new Error('两次输入密码不一致!'));
-        } else {
-          callback();
-        }
-      };
-      var validatePass3 = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请再次输入密码'));
-        } else if (value !== this.reOpenAccount.password) {
-          callback(new Error('两次输入密码不一致!'));
-        } else {
-          callback();
-        }
-      };
-      return {
-        activeName: 'second',
-        openAccount: {
-          stock_account:'',
-          registration:'',
-          business_license:'',
-          name: '',
-          gender: '',
-          license: '',
-          address: '',
-          authorizer_name:'',
-          authorizer_license:'',
-          authorizer_address:'',
-          authorizer_phone:'',
-          password:'',
-          confirm:'',
-          phone:'',
-          email:''
-        },
-        lossRegister:{
-          license: '',
-          account:'',
-          password:'',
-          type:''
-        },
-        closeAccount:{
-          license: '',
-          account:'',
-          password:''
-        },
-        reOpen:{
-          license: '',
-          account:'',
-          password:''
-        },
-        reOpenAccount: {
-          stock_account:'',
-          registration:'',
-          business_license:'',
-          name: '',
-          gender: '',
-          license: '',
-          address: '',
-          authorizer_name:'',
-          authorizer_license:'',
-          authorizer_address:'',
-          authorizer_phone:'',
-          password:'',
-          confirm:'',
-          phone:'',
-          email:''
-        },
-        rules: {
-          name: [
-            { required: true, message: '请输入姓名', trigger: 'blur' },
-          ],
-          gender: [
-            { required: true, message: '请选择性别', trigger: 'change' }
-          ],
-          license: [
-            { required: true, message: '请输入身份证号', trigger: 'blur' },
-
-            { validator: validateIDCard, trigger: 'blur' }
-          ],
-          email: [
-            { validator: validateEmail, trigger: 'blur' }
-          ],
-          phone: [
-            { validator: validateMobilePhone, trigger: 'blur' }
-          ],
-          password: [
-            { required: true,validator: validatePass, trigger: 'blur' }
-          ],
-          confirm: [
-            { validator: validatePass2, trigger: 'blur' }
-          ],
-          confirm2: [
-            { validator: validatePass3, trigger: 'blur' }
-          ],
-
-          account: [
-            { required: true,validator: validateCAccount, trigger: 'blur' }
-
-          ]
-        },
-        status:true
-      };
-    },
-    methods: {
-      open(formName){
-        this.$refs[formName].validate(valid =>{
-          if(valid){
-            this.$http.post('/security/co_register',this.$qs.stringify(this.openAccount))
-              .then(response => {
-                if(response.data['answer']==='ok'){
-                  alert("开户成功");
-                }else{
-                  alert(response.data['answer']);
-                }
-              })
-              .catch(function (error) {
-                console.log(error);
-              });
-          }else{
-            alert("表单还未完成");
-          }
-        })
-      },
-      loss(formName){
-        this.lossRegister.type = 1
-        this.$refs[formName].validate(valid =>{
-          if(valid){
-              this.$http.post('/security/co_lost',this.$qs.stringify(this.lossRegister))
-                .then(response => {
-                  if(response.data['answer']==='ok'){
-                    alert("挂失成功");
-                  }else{
-                    alert(response.data['answer']);
-                  }
-                })
-              .catch(function (error) {
-              console.log(error);
-            });
-          }else{
-            alert("表单还未完成");
-          }
-        })
-      },
-      reLoss(formName){
-        this.lossRegister.type = 0
-        this.$refs[formName].validate(valid =>{
-          if(valid){
-              this.$http.post('/security/co_lost',this.$qs.stringify(this.lossRegister))
-                .then(response => {
-                  console.log(response.data)
-                  if(response.data['answer']==='ok'){
-                    alert("取消挂失成功");
-                  }else{
-                    alert(response.data['answer']);
-                  }
-                })
-              .catch(function (error) {
-              console.log(error);
-            });
-          }else{
-            alert("表单还未完成");
-          }
-        })
-      },
-      pre_reopen(formName){
-        this.$refs[formName].validate(valid =>{
-          if(valid){
-            this.$http.post('/security/co_re_register',this.$qs.stringify(this.reOpen))
-              .then(response => {
-                if(response.data['answer']==='ok'){
-                  this.status = false
-                  this.reOpenAccount.name = response.data['infor']['name']
-                  this.reOpenAccount.gender = response.data['infor']['gender']
-                  this.reOpenAccount.license = response.data['infor']['license']
-                  this.reOpenAccount.phone = response.data['infor']['phone']
-                  this.reOpenAccount.email = response.data['infor']['email']
-                  this.reOpenAccount.business_license = response.data['infor']['business_license']
-                  this.reOpenAccount.registration = response.data['infor']['registration']
-                  this.reOpenAccount.authorizer_license = response.data['infor']['authorizer_license']
-                  this.reOpenAccount.authorizer_address = response.data['infor']['authorizer_address']
-                  this.reOpenAccount.authorizer_phone = response.data['infor']['authorizer_phone']
-                }else{
-                  alert(response.data['answer']);
-                }
-              })
-              .catch(function (error) {
-                console.log(error);
-            });
-          }else{
-            alert("表单还未完成");
-          }
-        })
-      },
-      reopen(formName){
-        this.$refs[formName].validate(valid =>{
-          if(valid){
-            this.$http.post('/security/co_re_register2',this.$qs.stringify(this.reOpenAccount))
-              .then(response => {
-                if(response.data['answer']==='ok'){
-                  alert("开户成功");
-                }else{
-                  alert(response.data['answer']);
-                }
-              })
-              .catch(function (error) {
-                console.log(error);
-              });
-          }else{
-            alert("表单还未完成");
-          }
-        })
-      },
-      close(formName){
-        this.$refs[formName].validate(valid =>{
-          if(valid){
-            this.$http.post('/security/co_delete',this.$qs.stringify(this.closeAccount))
-              .then(response => {
-                  if(response.data['answer']==='ok'){
-                    alert("销户成功");
-                  }else{
-                    alert(response.data['answer']);
-                  }
-                })
-              .catch(function (error) {
-                console.log(error);
-              }); 
-          }else{
-            alert("表单还未完成");
-          }
-        })
+export default {
+  name:"CorporateAccountView",
+  data() {
+    var validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'));
+      } else if (value !== this.openAccount.password) {
+        callback(new Error('两次输入密码不一致!'));
+      } else {
+        callback();
       }
+    };
+    var validateReOpen = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'));
+      } else if (value !== this.reOpenAccount.password) {
+        callback(new Error('两次输入密码不一致!'));
+      } else {
+        callback();
+      }
+    };
+    return {
+      activeName: 'second',
+      openAccount: {
+        stock_account:'',
+        registration:'',
+        business_license:'',
+        name: '',
+        gender: '',
+        license: '',
+        address: '',
+        authorizer_name:'',
+        authorizer_license:'',
+        authorizer_address:'',
+        authorizer_phone:'',
+        password:'',
+        confirm:'',
+        phone:'',
+        email:''
+      },
+      lossRegister:{
+        license: '',
+        account:'',
+        password:'',
+        type:''
+      },
+      closeAccount:{
+        license: '',
+        account:'',
+        password:''
+      },
+      reOpen:{
+        license: '',
+        account:'',
+        password:''
+      },
+      reOpenAccount: {
+        stock_account:'',
+        registration:'',
+        business_license:'',
+        name: '',
+        gender: '',
+        license: '',
+        address: '',
+        authorizer_name:'',
+        authorizer_license:'',
+        authorizer_address:'',
+        authorizer_phone:'',
+        password:'',
+        reopenconfirm:'',
+        phone:'',
+        email:''
+      },
+      rules: {
+        name: [
+          { required: true, message: '请输入姓名', trigger: 'blur' },
+        ],
+        gender: [
+          { required: true, message: '请选择性别', trigger: 'change' }
+        ],
+        license: [
+          {required: true, validator: validateIDCard, trigger: 'blur' },
+        ],
+        authorizer_license: [
+          {required: true, validator: validateIDCard, trigger: 'blur' },
+        ],
+        email: [
+          {required: true, validator: validateEmail, trigger: 'blur' }
+        ],
+        phone: [
+          {required: true, validator: validateMobilePhone, trigger: 'blur' }
+        ],
+        authorizer_phone:[
+          {required: true, validator: validateMobilePhone, trigger: 'blur' }
+        ],
+        password: [
+          {required: true,validator: validatePass, trigger: 'blur' }
+        ],
+        confirm: [
+          {required: true,validator: validatePass2, trigger: 'blur' }
+        ],
+        reopenconfirm: [
+          {required: true, validator: validateReOpen, trigger: 'blur' }
+        ],
+        account: [
+          {required: true,validator: validateCAccount, trigger: 'blur' }
+        ],
+        registration:[
+          {required: true,validator: validateRegistration, trigger: 'blur' }
+        ],
+        business_license:[
+          {required: true,validator: validateBusinessLicense, trigger: 'blur' }
+        ]
+      },
+      status:true
+    };
+  },
+  methods: {
+    open(formName){
+      this.$refs[formName].validate(valid =>{
+        if(valid){
+          this.openAccount.password=Encrypt(this.openAccount.password)
+          this.openAccount.confirm=Encrypt(this.openAccount.confirm)          
+          this.$http.post('/security/co_register',this.$qs.stringify(this.openAccount))
+            .then(response => {
+              if(response.data['answer']==='ok'){
+               this.$message({
+                  showClose: true,
+                  message: "开户成功",
+                  type:'success'
+                });
+              }else{
+                this.$message({
+                  showClose: true,
+                  message: response.data['answer'],
+                  type:'error'
+                });
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+          this.openAccount.password=Decrypt(this.openAccount.password)
+          this.openAccount.confirm=Decrypt(this.openAccount.confirm)
+        }else{
+          this.$message({
+            showClose: true,
+            message: "表单还未完成",
+          });
+        }
+      })
+    },
+    loss(formName){
+      this.lossRegister.type = 1
+      this.$refs[formName].validate(valid =>{
+        if(valid){
+          this.lossRegister.password=Encrypt(this.lossRegister.password)
+          this.$http.post('/security/co_lost',this.$qs.stringify(this.lossRegister))
+            .then(response => {
+              if(response.data['answer']==='ok'){
+                this.$message({
+                  showClose: true,
+                  message: "挂失成功",
+                  type:'success'
+                });
+              }else{
+                this.$message({
+                  showClose: true,
+                  message: response.data['answer'],
+                  type:'error'
+                });
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+          this.lossRegister.password=Decrypt(this.lossRegister.password)
+        }else{
+          this.$message({
+            showClose: true,
+            message: "表单还未完成",
+          });
+        }
+      })
+    },
+    reLoss(formName){
+      this.lossRegister.type = 0
+      this.$refs[formName].validate(valid =>{
+        if(valid){
+          this.lossRegister.password=Encrypt(this.lossRegister.password)
+          this.$http.post('/security/co_lost',this.$qs.stringify(this.lossRegister))
+            .then(response => {
+              console.log(response.data)
+              if(response.data['answer']==='ok'){
+                this.$message({
+                  showClose: true,
+                  message: "取消挂失成功",
+                  type:'success'
+                });
+              }else{
+                this.$message({
+                  showClose: true,
+                  message: response.data['answer'],
+                  type:'error'
+                });
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+          this.lossRegister.password=Decrypt(this.lossRegister.password)
+        }else{
+          this.$message({
+            showClose: true,
+            message: "表单还未完成",
+          });
+        }
+      })
+    },
+    pre_reopen(formName){
+      this.$refs[formName].validate(valid =>{
+        if(valid){
+          this.reOpen.password=Encrypt(this.reOpen.password)
+          this.$http.post('/security/co_re_register',this.$qs.stringify(this.reOpen))
+            .then(response => {
+              if(response.data['answer']==='ok'){
+                this.status = false
+                this.reOpenAccount.name = response.data['infor']['name']
+                this.reOpenAccount.gender = response.data['infor']['gender']
+                this.reOpenAccount.license = response.data['infor']['license']
+                this.reOpenAccount.phone = response.data['infor']['phone']
+                this.reOpenAccount.email = response.data['infor']['email']
+                this.reOpenAccount.business_license = response.data['infor']['business_license']
+                this.reOpenAccount.registration = response.data['infor']['registration']
+                this.reOpenAccount.authorizer_license = response.data['infor']['authorizer_license']
+                this.reOpenAccount.authorizer_address = response.data['infor']['authorizer_address']
+                this.reOpenAccount.authorizer_phone = response.data['infor']['authorizer_phone']
+              }else{
+                this.$message({
+                  showClose: true,
+                  message: response.data['answer'],
+                  type:'error'
+                });
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+          this.reOpen.password=Decrypt(this.reOpen.password)
+        }else{
+          this.$message({
+            showClose: true,
+            message: "表单还未完成",
+          });
+        }
+      })
+    },
+    reopen(formName){
+      this.$refs[formName].validate(valid =>{
+        if(valid){
+          this.reOpenAccount.password=Encrypt(this.reOpenAccount.password)
+          this.reOpenAccount.reopenconfirm=Encrypt(this.reOpenAccount.reopenconfirm)
+          this.$http.post('/security/co_re_register2',this.$qs.stringify(this.reOpenAccount))
+            .then(response => {
+              if(response.data['answer']==='ok'){
+                this.$message({
+                  showClose: true,
+                  message: "开户成功",
+                  type:'success'
+                });
+              }else{
+                this.$message({
+                  showClose: true,
+                  message: response.data['answer'],
+                  type:'error'
+                });
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+          this.reOpenAccount.password=Decrypt(this.reOpenAccount.password)
+          this.reOpenAccount.reopenconfirm=Decrypt(this.reOpenAccount.reopenconfirm)
+        }else{
+          this.$message({
+            showClose: true,
+            message: "表单还未完成",
+          });
+        }
+      })
+    },
+    close(formName){
+      this.$refs[formName].validate(valid =>{
+        if(valid){
+          this.closeAccount.password=Encrypt(this.closeAccount.password)
+          this.$http.post('/security/co_delete',this.$qs.stringify(this.closeAccount))
+            .then(response => {
+              if(response.data['answer']==='ok'){
+                this.$message({
+                  showClose: true,
+                  message: "销户成功",
+                  type:'success'
+                });
+              }else{
+                this.$message({
+                  showClose: true,
+                  message: response.data['answer'],
+                  type:'error'
+                });
+              }
+            })
+            .catch(function (error) {
+              console.log(error);
+            }); 
+          this.closeAccount.password=Decrypt(this.closeAccount.password)
+        }else{
+          this.$message({
+            showClose: true,
+            message: "表单还未完成",
+          });
+        }
+      })
     }
-  };
+  }
+};
 </script>
 
 <style scoped>
