@@ -12,7 +12,8 @@ import VueCookies from 'vue-cookies';
 const app = createApp(App)
 app.use(store).use(router).use(ElementPlus).use(VueCookies)
 
-axios.defaults.baseURL = 'http://10.186.2.215:4399/administrator'
+// axios.defaults.baseURL = 'http://10.186.2.215:4399/administrator'
+axios.defaults.baseURL = 'http://10.186.229.65:4399/administrator'
 
 // axios.defaults.headers.post['Content-Type'] = 'application/json; charset=utf-8';
 
