@@ -363,8 +363,8 @@ export default {
           this.openAccount.password=Encrypt(this.openAccount.password)
           this.openAccount.loginPassword=Encrypt(this.openAccount.loginPassword)
           this.openAccount.loginConfirm=Encrypt(this.openAccount.loginConfirm)
-          this.openAccount.tradePassword=Encrypt(this.openAccount.loginPassword)
-          this.openAccount.tradeConfirm=Encrypt(this.openAccount.loginConfirm)          
+          this.openAccount.tradePassword=Encrypt(this.openAccount.tradePassword)
+          this.openAccount.tradeConfirm=Encrypt(this.openAccount.tradeConfirm)          
 
           this.$http.post('/fund/register',this.$qs.stringify(this.openAccount))
             .then(response => {
@@ -388,8 +388,8 @@ export default {
           this.openAccount.password=Decrypt(this.openAccount.password)
           this.openAccount.loginPassword=Decrypt(this.openAccount.loginPassword)
           this.openAccount.loginConfirm=Decrypt(this.openAccount.loginConfirm)
-          this.openAccount.tradePassword=Decrypt(this.openAccount.loginPassword)
-          this.openAccount.tradeConfirm=Decrypt(this.openAccount.loginConfirm)   
+          this.openAccount.tradePassword=Decrypt(this.openAccount.tradeConfirm)
+          this.openAccount.tradeConfirm=Decrypt(this.openAccount.tradeConfirm)   
         }else{
           this.$message({
             showClose: true,

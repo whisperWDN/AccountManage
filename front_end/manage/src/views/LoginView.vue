@@ -119,7 +119,6 @@ export default {
   },
   methods: {
     login(formName){
-      // console.log(this.$cookies.get("administratorName") )
       this.$refs[formName].validate(valid =>{
         if(valid){
           this.Login.password=Encrypt(this.Login.password)
