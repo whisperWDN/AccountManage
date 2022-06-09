@@ -110,7 +110,7 @@
           </el-form-item>
         </el-row>
         <el-form-item label="股票账户" prop="stock_account">
-          <el-input v-model="openAccount.stock_account" ></el-input>
+          <el-input v-model="reOpenAccount.stock_account" ></el-input>
         </el-form-item>
         <el-form-item label="身份证号" prop="license">
           <el-input v-model="reOpenAccount.license" readonly=true></el-input>
